@@ -1,6 +1,4 @@
-def main():
-    print("Hello from finalprojectdata440!")
-
+from src.interface import main
 
 if __name__ == "__main__":
     main()
