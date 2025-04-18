@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QGridLayout
 
-from qtcomponents import WindowWithVerticalSlots
+#from qtcomponents import WindowWithVerticalSlots
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -18,6 +18,7 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication([])
+
     window = MainWindow()
 
     #set the window size permanently, in pixels

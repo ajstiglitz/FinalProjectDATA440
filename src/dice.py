@@ -4,8 +4,11 @@
 # then d6
 
 #use linear algebra for the creation of the dice
-#maybe download blender to see the vertices in the plane
+# PIXEL ART
 
+#
+
+import random
 
 import sys
 import src.helpers
@@ -16,9 +19,9 @@ class DiceCreation():
         return
 
 
-    def twenty_sided(self) -> None:
-
-        return None
+    def twenty_sided(self) -> int:
+        self.dtwenthy = random.randint(0,20)
+        return self.dtwenty
 
 
     def twelve_sided(self) -> None:
