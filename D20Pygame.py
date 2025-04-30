@@ -11,7 +11,7 @@ pygame.init()
 WIDTH = 400
 HEIGHT = 300
 
-screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.NOFRAME)
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 pygame.display.set_caption('DiceRoller')
 
