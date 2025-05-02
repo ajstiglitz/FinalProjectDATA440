@@ -5,6 +5,8 @@ from PyQt5.QtGui import QMovie
 
 import random
 
+from src.buttons import CombinedProfInsp
+
 import os
 
 # Tab 1-specific widgets
@@ -68,12 +70,12 @@ class RollerBoxWidget(QWidget):
         top_layout.addWidget(self.combo_box)
 
         #the gifs
-        self.gif_width = 200
-        self.gif_height = 200
+        self.gif_width = 400
+        self.gif_height = 400
 
         self.die_gif = QLabel()
-        self.die_gif.setFixedSize(100,100)
-        self.gif = QMovie(os.path.join("gifs","d20.gif"))
+        self.die_gif.setFixedSize(400,400)
+        self.gif = QMovie(os.path.join("src","gifs","d20.gif"))
         self.die_gif.setMovie(self.gif)
         self.gif.start()    
 
@@ -108,7 +110,7 @@ class RollerBoxWidget(QWidget):
     def update_image(self):
         # this should update the image (gif) shown based on the dice chosen from the combo box.
         die = self.combo_box.currentText()
-        gif_path = os.path.join("gifs",f"{die}.gif")
+        gif_path = os.path.join("src","gifs",f"{die}.gif")
 
         self.gif.stop()
         self.gif = QMovie(gif_path)
@@ -133,7 +135,9 @@ class ResultWidget(QWidget):
 
         #maybe make conditional on the d20
         self.result_label = QLabel("Result of STR : Athletics")
+        self.result_label.setAlignment(Qt.AlignCenter)
         self.value_label = QLabel("0")
+        self.value_label.setAlignment(Qt.AlignCenter)
 
         layout = QVBoxLayout()
         layout.addWidget(self.combo_box_attribute)
@@ -191,111 +195,20 @@ class ResultWidget(QWidget):
         self.result_label.setText(f"Result of {stat} : {attribute}")
         self.value_label.setText(str(value))
 
-class CheckBoxAndLabel(QWidget):
-    def __init__(self):
-        super().__init__()
-        #Check box for inspiration
-        #can probably find a way to make it more general for other use
-
-        layout = QVBoxLayout()
-
-        self.checkBox = QCheckBox("Inspiration")
-        self.checkBox.stateChanged.connect(self.update_message)
-        self.checkBox.setChecked(False) # want it to start unchecked
-        self.checkBox.setGeometry(200,150,100,30)
-        #label needs to have its state changed by the modifiers
-        #and additionally if checkbox is checked, modifier needs to have prof bonus added
-        self.label = QLabel("")
-        self.label.setAlignment(Qt.AlignLeft)
-
-        layout.addWidget(self.checkBox)
-        layout.addWidget(self.label)
-
-        self.setLayout(layout)
-
-    def update_message(self, state):
-        if state == Qt.Checked:
-            self.label.setText("Inspired!")
-        else:
-            self.label.setText("")
-
-#The code for the proficiency bonus  
-class ButtonsUpdateLabel(QWidget):
-    #proficiency bonus widget
-    def __init__(self):
-        super().__init__()
-
-        self.prof_label = QLabel("Proficiency Bonus")
-
-        layout = QVBoxLayout()
-
-        layout.addWidget(self.prof_label)
-
-        self.value = 2
-
-        #Horizontal layout for buttons and number bonus
-        button_layout = QHBoxLayout()
-
-        self.minus_button = QPushButton('-')
-        self.minus_button.clicked.connect(self.decrease_number)
-        button_layout.addWidget(self.minus_button)
-
-        #self.prof_bonus_label = QLabel()
-        #self.update_prof_display()
-        #button_layout.addWidget(self.prof_bonus_label)
-
-        self.proficiency_display = QLabel()
-        self.update_prof_display()
-        button_layout.addWidget(self.proficiency_display)
-
-        self.plus_button = QPushButton('+')
-        self.plus_button.clicked.connect(self.increase_number)
-        button_layout.addWidget(self.plus_button)
-
-        layout.addLayout(button_layout)
-
-        self.setLayout(layout)
-
-        self.update_button_states()
-
-    
-    def update_prof_display(self):
-        #this might be superfluous
-        self.proficiency_display.setText(str(self.value))
-
-    def decrease_number(self):
-        #see if this works
-        if self.value > 2:
-            self.value -= 1
-            self.update_prof_display()
-            self.update_button_states()
-
-    def increase_number(self):
-        #see if this works
-        if self.value < 6:
-            self.value += 1
-            self.update_prof_display()
-            self.update_button_states()
-    
-    def update_button_states(self):
-        self.minus_button.setEnabled(self.value > 2)
-        self.plus_button.setEnabled(self.value < 6)
-
 #Debugging class
-class WindowCheck(QMainWindow):
+class WindowCheck(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("D&D Roller Tool")
 
         self.roller = RollerBoxWidget()
         self.result = ResultWidget()
+        self.prof_insp = CombinedProfInsp()
 
         self.roller.roll_made.connect(self.result.update_result_label)
 
-        central_widget = QWidget()
         layout = QVBoxLayout()
+        layout.addWidget(self.prof_insp)
         layout.addWidget(self.roller)
         layout.addWidget(self.result)
-        central_widget.setLayout(layout)
-
-        self.setCentralWidget(central_widget)
+        
+        self.setLayout(layout)

@@ -26,16 +26,8 @@ class MainWindow(QMainWindow):
 
     def create_tabs(self):
         #tab 1 - for the dice roller and ability scores
-        tab1 = QWidget()
-        layout_tab1 = QVBoxLayout()
-
-        #ComboBox to select between dice
-        self.dice_selector = QComboBox()
-        self.dice_selector.addItems(["D20", "D12", "D10", "D8", "D6", "D4"])
-
-        #tab setup
-        tab1.setLayout(layout_tab1)
-        self.tab_widget.addTab(tab1, "Dice Roller")
+        dice_roller_tab = RollerTab()
+        self.tab_widget.addTab(dice_roller_tab, "Dice Roller")
 
         #tab 2
         character_info_tab = CharacterInfoTab()

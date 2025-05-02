@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
                              QPushButton, QHBoxLayout, QGridLayout)
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
  
 class AttributesLoaded(QWidget):
     def __init__(self,prof_widget):
@@ -33,16 +33,15 @@ class CombinedProfInsp(QWidget):
         super().__init__()
 
         layout = QVBoxLayout()
+        layout.setSpacing(2)
+        layout.setContentsMargins(5,5,5,5)
 
         self.proficiency_bonus = ButtonsUpdateLabel()
 
         self.inspiration = CheckBoxAndLabel()
 
-        self.attributes_panel = AttributesLoaded(self.proficiency_bonus)
-
         layout.addWidget(self.proficiency_bonus)
         layout.addWidget(self.inspiration)
-        layout.addWidget(self.attributes_panel)
 
         self.setLayout(layout)
 
@@ -59,6 +58,8 @@ class ButtonsUpdateLabel(QWidget):
         self.prof_label = QLabel("Proficiency Bonus")
 
         layout = QVBoxLayout()
+        layout.setSpacing(2)
+        layout.setContentsMargins(5,5,5,5)
 
         layout.addWidget(self.prof_label)
 
@@ -68,6 +69,7 @@ class ButtonsUpdateLabel(QWidget):
         button_layout = QHBoxLayout()
 
         self.minus_button = QPushButton('-')
+        self.minus_button.setFixedSize(25, 25)
         self.minus_button.clicked.connect(self.decrease_number)
         button_layout.addWidget(self.minus_button)
 
@@ -80,6 +82,7 @@ class ButtonsUpdateLabel(QWidget):
         button_layout.addWidget(self.proficiency_display)
 
         self.plus_button = QPushButton('+')
+        self.plus_button.setFixedSize(25, 25)
         self.plus_button.clicked.connect(self.increase_number)
         button_layout.addWidget(self.plus_button)
 
@@ -122,6 +125,8 @@ class CheckBoxAndLabel(QWidget):
         #can probably find a way to make it more general for other use
 
         layout = QVBoxLayout()
+        layout.setSpacing(2)
+        layout.setContentsMargins(5,5,5,5)
 
         self.checkBox = QCheckBox("Inspiration")
         self.checkBox.stateChanged.connect(self.update_message)
@@ -153,15 +158,26 @@ class AttributeAdjuster(QWidget):
         self.value = 10
 
         main_layout = QVBoxLayout()
+        main_layout.setSpacing(2)
+        main_layout.setContentsMargins(5,5,5,5)
         self.setLayout(main_layout)
 
+        #names
+        attribute_names = QLabel(self.name)
+        attribute_names.setAlignment(Qt.AlignCenter)  # Centered name
+        main_layout.addWidget(attribute_names)
+
         self.adjuster_row = QHBoxLayout()
+        self.adjuster_row.setSpacing(2)
 
         self.minus_button = QPushButton('-')
+        self.minus_button.setFixedSize(25, 25)
         self.minus_button.clicked.connect(self.decrease_attribute)
 
         self.modifier_label = QLabel()
+        self.modifier_label.setAlignment(Qt.AlignCenter)
         self.plus_button = QPushButton('+')
+        self.plus_button.setFixedSize(25, 25)
         self.plus_button.clicked.connect(self.increase_attribute)
 
         for w in [self.minus_button, self.modifier_label, self.plus_button]:
@@ -170,6 +186,7 @@ class AttributeAdjuster(QWidget):
         main_layout.addLayout(self.adjuster_row)
 
         self.attribtue_display = QLabel()
+        self.attribtue_display.setAlignment(Qt.AlignCenter)
         self.update_attribute_display()
         main_layout.addWidget(self.attribtue_display)
         return
@@ -195,16 +212,18 @@ class AttributeAdjuster(QWidget):
 
 class AttributeCheck(QWidget):
     def __init__(self, attr_name:str, 
-                 attr_adjuster:AttributeAdjuster, 
-                 prof_widget:ButtonsUpdateLabel):
+                 attr_adjuster:AttributeAdjuster,
+                 prof_widget):
         super().__init__()
+
+        self.prof_widget = prof_widget
 
         self.checks = []
 
         self.attr_adjuster = attr_adjuster
-        self.prof_widget = prof_widget
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
         #number of check boxes based on the the attribute like how in ResultWidget, the second combo box has different number of options
         # when checked, the proficiency bonus should be added to the modifier that the attribute display has
@@ -224,17 +243,17 @@ class AttributeCheck(QWidget):
         skills = attributes_options.get(attr_name, [])
         fixed_row_num = 2
         grid_layout = QGridLayout()
-        self.layout.addLayout(grid_layout)
+        layout.addLayout(grid_layout)
 
         #trying to get the rows fixed but cols whatever
         for i, skill in enumerate(skills):
             rows = i % fixed_row_num
             cols = i // fixed_row_num
-                    
 
             checkbox = QCheckBox(skill)
 
             label = QLabel("")
+            label.setAlignment(Qt.AlignCenter)
             label.setFixedWidth(30)
 
             checkbox.stateChanged.connect(lambda state, c=checkbox, l=label: self.update_label(c, l))

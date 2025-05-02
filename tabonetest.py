@@ -1,60 +1,37 @@
 import sys
-from PyQt5.QtWidgets import (QWidget, QLabel, QMainWindow, QApplication,
-                             QLineEdit, QHBoxLayout, QVBoxLayout)
-from src.buttons import CombinedProfInsp
+from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout)
+from src.buttons import AttributesLoaded, ButtonsUpdateLabel
 from src.diceroller import WindowCheck
 
 #this is the assembly test for tab1 before adding it to main.py
 
-class RollerTab(QMainWindow):
+class RollerTab(QWidget):
     def __init__(self):
         super().__init__()
 
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-
-        main_layout = QVBoxLayout()
+        main_layout = QHBoxLayout()
 
         #at the top are the prof bonus and inspiration widget and then the dice roller widget
-        top_row_layout = QHBoxLayout()
+        left_column = QVBoxLayout()
 
-        self.prof_insp_widget = CombinedProfInsp()
-        top_row_layout.addWidget(self.prof_insp_widget)
+        self.prof_bonus = ButtonsUpdateLabel()
 
-        #dice roller widget and result added here
+        #splitting until we figure out issues with adjustor
+        #left_column.addWidget(QLabel("ADJUSTER HERE"))
+        self.attributes = AttributesLoaded(self.prof_bonus)
+        left_column.addWidget(self.attributes)
+
+
+        #right side of window
+        right_col = QVBoxLayout()
         self.roller_widget = WindowCheck()
-        top_row_layout.addWidget(self.roller_widget)
+        right_col.addWidget(self.roller_widget)
         #Maybe have dice roll AND result of roll with modifiers
         #since nat 1 is nat 1 regardless of what you have added
 
+        #add to main layout
+        main_layout.addLayout(left_column, stretch=1)
 
-        main_layout.addLayout(top_row_layout)
+        main_layout.addLayout(right_col, stretch=2)
 
-
-        #bottom layout here.
-        # Should include the attribute adjuster and roll result widgets.
-        #attribute adjuster needs to be fixed to have the check marks
-
-        bottom_row_layout = QHBoxLayout()
-        #self.result_widget = ResultWidget()
-        #bottom_row_layout.addWidget(self.result_widget)
-
-        main_layout.addLayout(bottom_row_layout)
-
-
-        central_widget.setLayout(main_layout)
-
-
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = RollerTab()
-    window.show()
-
-    #uses a qss style sheet. Need to look online and cycle through some to see what colors look best.
-    with open("style.qss", "r") as f:
-        _style = f.read()
-        app.setStyleSheet(_style)
-
-    sys.exit(app.exec())
+        self.setLayout(main_layout)
