@@ -1,12 +1,32 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
-                             QPushButton, QHBoxLayout)
+                             QPushButton, QHBoxLayout, QGridLayout)
 
 from PyQt5.QtCore import Qt
  
 class AttributesLoaded(QWidget):
-    def __init__(self):
+    def __init__(self,prof_widget):
         super().__init__()
 
+        self.prof_widget = prof_widget
+
+        layout = QVBoxLayout()
+
+        layout.setSpacing(2)
+        layout.setContentsMargins(5,5,5,5)
+        self.setLayout(layout)
+
+        # Create attributes + checkboxes
+        for attr_name in ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']:
+            attr_adjuster = AttributeAdjuster(attr_name)
+            attr_check = AttributeCheck(attr_name, attr_adjuster, self.prof_widget)
+
+            attr_section = QVBoxLayout()
+            attr_section.addWidget(attr_adjuster)
+            attr_section.addWidget(attr_check)
+
+            section_widget = QWidget()
+            section_widget.setLayout(attr_section)
+            layout.addWidget(section_widget)
 
 class CombinedProfInsp(QWidget):
     def __init__(self):
@@ -18,8 +38,11 @@ class CombinedProfInsp(QWidget):
 
         self.inspiration = CheckBoxAndLabel()
 
+        self.attributes_panel = AttributesLoaded(self.proficiency_bonus)
+
         layout.addWidget(self.proficiency_bonus)
         layout.addWidget(self.inspiration)
+        layout.addWidget(self.attributes_panel)
 
         self.setLayout(layout)
 
@@ -122,15 +145,17 @@ class CheckBoxAndLabel(QWidget):
 
 
 
-class AttributeAdjuster(QVBoxLayout):
+class AttributeAdjuster(QWidget):
     def __init__(self, name: str):
         super().__init__()
 
         self.name = name
         self.value = 10
 
+        main_layout = QVBoxLayout()
+        self.setLayout(main_layout)
+
         self.adjuster_row = QHBoxLayout()
-        self.addLayout(self.adjuster_row)
 
         self.minus_button = QPushButton('-')
         self.minus_button.clicked.connect(self.decrease_attribute)
@@ -142,9 +167,11 @@ class AttributeAdjuster(QVBoxLayout):
         for w in [self.minus_button, self.modifier_label, self.plus_button]:
             self.adjuster_row.addWidget(w)
 
+        main_layout.addLayout(self.adjuster_row)
+
         self.attribtue_display = QLabel()
         self.update_attribute_display()
-        self.addWidget(self.attribtue_display)
+        main_layout.addWidget(self.attribtue_display)
         return
     
     def update_attribute_display(self):
@@ -162,13 +189,67 @@ class AttributeAdjuster(QVBoxLayout):
         self.value -= 1
         self.update_attribute_display()
         return
+    
+    def get_modifier(self):
+        return (self.value - 10) // 2
 
 class AttributeCheck(QWidget):
-    def __init__(self):
+    def __init__(self, attr_name:str, 
+                 attr_adjuster:AttributeAdjuster, 
+                 prof_widget:ButtonsUpdateLabel):
         super().__init__()
 
-        layout = QVBoxLayout()
+        self.checks = []
+
+        self.attr_adjuster = attr_adjuster
+        self.prof_widget = prof_widget
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
 
         #number of check boxes based on the the attribute like how in ResultWidget, the second combo box has different number of options
         # when checked, the proficiency bonus should be added to the modifier that the attribute display has
-        self.check_box = QCheckBox()
+        #list of tuples for the different options
+
+        self.list=[]
+
+        attributes_options = {
+            'STR': ['Saving Throw', 'Athletics'],
+            'DEX': ['Saving Throw', 'Acrobatics','Sleight of Hand', 'Stealth'],
+            'CONS': ['Saving Throw'],
+            'INT': ['Saving Throw', 'Arcana', 'History', 'Investigation', 'Nature', 'Religion'],
+            'WIS': ['Saving Throw', 'Animal Handling','Insight','Medicine','Perception','Survival'],
+            'CHA': ['Saving Throw', 'Deception','Intimidation','Performace','Persuasion']
+        }
+
+        skills = attributes_options.get(attr_name, [])
+        fixed_row_num = 2
+        grid_layout = QGridLayout()
+        self.layout.addLayout(grid_layout)
+
+        #trying to get the rows fixed but cols whatever
+        for i, skill in enumerate(skills):
+            rows = i % fixed_row_num
+            cols = i // fixed_row_num
+                    
+
+            checkbox = QCheckBox(skill)
+
+            label = QLabel("")
+            label.setFixedWidth(30)
+
+            checkbox.stateChanged.connect(lambda state, c=checkbox, l=label: self.update_label(c, l))
+
+            grid_layout.addWidget(checkbox, rows, cols*2)
+            grid_layout.addWidget(label, rows, cols*2)
+
+
+            self.checks.append((checkbox, label))
+
+    def update_label(self, checkbox, label):
+        if checkbox.isChecked():
+            prof = self.prof_widget.value
+            mod = self.attr_adjuster.get_modifier()
+            total = prof + mod
+            label.setText(str(total))
+        else:
+            label.setText("")

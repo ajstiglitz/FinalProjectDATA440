@@ -1,9 +1,7 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel, 
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
                              QPushButton, QHBoxLayout, QComboBox, QMainWindow)
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal, QSize
 from PyQt5.QtGui import QMovie
-
-from PyQt5 import QtWidgets as qtw
 
 import random
 
@@ -70,6 +68,9 @@ class RollerBoxWidget(QWidget):
         top_layout.addWidget(self.combo_box)
 
         #the gifs
+        self.gif_width = 200
+        self.gif_height = 200
+
         self.die_gif = QLabel()
         self.die_gif.setFixedSize(100,100)
         self.gif = QMovie(os.path.join("gifs","d20.gif"))
@@ -108,8 +109,12 @@ class RollerBoxWidget(QWidget):
         # this should update the image (gif) shown based on the dice chosen from the combo box.
         die = self.combo_box.currentText()
         gif_path = os.path.join("gifs",f"{die}.gif")
+
         self.gif.stop()
         self.gif = QMovie(gif_path)
+
+        self.gif.setScaledSize(QSize(self.gif_width, self.gif_height))
+
         self.die_gif.setMovie(self.gif)
         self.gif.start()
 
@@ -126,6 +131,7 @@ class ResultWidget(QWidget):
         self.combo_2 = QComboBox()
         self.combo_2.setFixedSize(100,30)
 
+        #maybe make conditional on the d20
         self.result_label = QLabel("Result of STR : Athletics")
         self.value_label = QLabel("0")
 
@@ -178,6 +184,8 @@ class ResultWidget(QWidget):
         # example: if a d20 rolled a 10, and the combo chosen was str: athletics and the player has a +2 and the proficiency checked (lets say another +2)
         # then the resulting roll should be 10 + 2 + 2 which would be 14
         # result should come out as a label. 
+
+        #maybe only have it appear when combo box is on d20, then the result probably is fine...
         stat = self.combo_box_attribute.currentText()
         attribute = self.combo_2.currentText()
         self.result_label.setText(f"Result of {stat} : {attribute}")
