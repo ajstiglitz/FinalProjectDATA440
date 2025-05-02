@@ -1,64 +1,71 @@
-#from src.interfaceTest import main
-#from pathlib import Path
 import sys
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel,
-                             QLineEdit, QHBoxLayout, QVBoxLayout)
-from src.qtcomponents import LabelTextEditWidget
-from src.qtcomponents import ImageUploadWidget
 
-#Class for the main window. All I have so far is the window which should actually be in the second tab.
-#Need to digure out how to do that...
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QGridLayout, 
+                             QTabWidget, QWidget, QVBoxLayout, QLabel, QComboBox,
+                             QCheckBox, QLineEdit, QFormLayout, QFrame)
+
+from PyQt5.QtCore import Qt
+
+#from qtcomponents import WindowWithVerticalSlots
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Character Sheet")
-        self.setGeometry(100, 100, 800, 600)
+        self.setWindowTitle("DiceRoller")
 
-        main_widget = QWidget()
-        main_layout = QVBoxLayout()
+        self.tab_widget = QTabWidget()
+        self.tab_widget.setTabPosition(QTabWidget.West)
 
-        # At the top are character details like name, race, class, etc.
-        top_row_layout = QHBoxLayout()
-        labels = ["Name", "Class", "Race", "Alignment", "Level", "Age"]
-        self.line_edits = {}
+        self.setCentralWidget(self.tab_widget)
+        self.create_tabs()
 
-        for label_text in labels:
-            container = QVBoxLayout()
-            label = QLabel(label_text)
-            edit = QLineEdit()
-            container.addWidget(label)
-            container.addWidget(edit)
-            top_row_layout.addLayout(container)
-            self.line_edits[label_text] = edit
+    def create_tabs(self):
+        #tab 1 - for the dice roller and ability scores
+        tab1 = QWidget()
+        layout_tab1 = QVBoxLayout()
 
-        main_layout.addLayout(top_row_layout)
+        #ComboBox to select between dice
+        self.dice_selector = QComboBox()
+        self.dice_selector.addItems(["D20", "D12", "D10", "D8", "D6", "D4"])
 
-        # widgets for the middle of the window. Are the image of character and the features
-        middle_layout = QHBoxLayout()
+        #tab setup
+        tab1.setLayout(layout_tab1)
+        self.tab_widget.addTab(tab1, "Dice Roller")
 
-        # Left widget: Image Upload
-        self.image_upload_widget = ImageUploadWidget()
-        middle_layout.addWidget(self.image_upload_widget, 1)
+        #tab 2
+        tab2 = QWidget()
+        layout_tab2 = QVBoxLayout()
+        tab2.setLayout(layout_tab2)
+        self.tab_widget.addTab(tab2, "Character Info")
+#        layout_tab2.addWidget()
 
-        # Right widget: Features
-        self.features_widget = LabelTextEditWidget("Features & Traits")
-        middle_layout.addWidget(self.features_widget, 2)
 
-        main_layout.addLayout(middle_layout)
+        label2 = QLabel()
+        label2.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+        label2.setText("TEXT TEST")
+        label2.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        layout_tab2.addWidget(label2)
 
-        # at the bottom are the widgets for the inventory and proficiencies a character may have
-        bottom_layout = QHBoxLayout()
-        self.traits_widget = LabelTextEditWidget("Inventory")
-        self.notes_widget = LabelTextEditWidget("Other Proficiencies & Languages")
+        label2_2 = QLabel()
+        label2_2.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+        label2_2.setText("TESTING")
+        label2_2.setAlignment(Qt.AlignTop | Qt.AlignCenter)
+        layout_tab2.addWidget(label2_2)
 
-        bottom_layout.addWidget(self.traits_widget)
-        bottom_layout.addWidget(self.notes_widget)
+        label2_2_2 = QLabel()
+        label2_2_2.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+        label2_2_2.setText("TESTING AGAIN")
+        label2_2_2.setAlignment(Qt.AlignTop | Qt.AlignRight)
+        layout_tab2.addWidget(label2_2_2)
 
-        main_layout.addLayout(bottom_layout)
 
-        main_widget.setLayout(main_layout)
-        self.setCentralWidget(main_widget)
+        #tab 3
+        tab3 = QWidget()
+        layout_tab3 = QVBoxLayout()
+        tab3.setLayout(layout_tab3)
+        self.tab_widget.addTab(tab3, "Visualization")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

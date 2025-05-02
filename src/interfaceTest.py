@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import (QMainWindow, QApplication, QGridLayout,
 
 from PyQt5.QtCore import Qt
 
-from src.diceroller import D20DiceRoller, D12DiceRoller, D10DiceRoller, D8DiceRoller, D6DiceRoller, D4DiceRoller
 #from qtcomponents import WindowWithVerticalSlots
 
 class MainWindow(QMainWindow):

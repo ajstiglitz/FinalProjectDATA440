@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QTextEdit,
 from PyQt5.QtCore import Qt, QDir
 from PyQt5.QtGui import QPixmap
 
+#All of these components are Tab 2-specific
+
 class LabelTextEditWidget(QWidget):
     """
     General Template class for a Widget with a QLabel and QTextEditor.
