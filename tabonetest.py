@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import (QWidget, QLabel, QMainWindow, QApplication,
                              QLineEdit, QHBoxLayout, QVBoxLayout)
 from src.buttons import CombinedProfInsp
-from src. diceroller import *
+from src.diceroller import WindowCheck
 
 #this is the assembly test for tab1 before adding it to main.py
 
@@ -21,13 +21,25 @@ class RollerTab(QMainWindow):
         self.prof_insp_widget = CombinedProfInsp()
         top_row_layout.addWidget(self.prof_insp_widget)
 
-        #dice roller widget added here
+        #dice roller widget and result added here
+        self.roller_widget = WindowCheck()
+        top_row_layout.addWidget(self.roller_widget)
+        #Maybe have dice roll AND result of roll with modifiers
+        #since nat 1 is nat 1 regardless of what you have added
+
 
         main_layout.addLayout(top_row_layout)
 
 
         #bottom layout here.
         # Should include the attribute adjuster and roll result widgets.
+        #attribute adjuster needs to be fixed to have the check marks
+
+        bottom_row_layout = QHBoxLayout()
+        #self.result_widget = ResultWidget()
+        #bottom_row_layout.addWidget(self.result_widget)
+
+        main_layout.addLayout(bottom_row_layout)
 
 
         central_widget.setLayout(main_layout)

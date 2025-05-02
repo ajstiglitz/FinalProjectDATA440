@@ -3,6 +3,11 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
 
 from PyQt5.QtCore import Qt
  
+class AttributesLoaded(QWidget):
+    def __init__(self):
+        super().__init__()
+
+
 class CombinedProfInsp(QWidget):
     def __init__(self):
         super().__init__()
@@ -114,3 +119,56 @@ class CheckBoxAndLabel(QWidget):
             self.label.setText("Inspired!")
         else:
             self.label.setText("")
+
+
+
+class AttributeAdjuster(QVBoxLayout):
+    def __init__(self, name: str):
+        super().__init__()
+
+        self.name = name
+        self.value = 10
+
+        self.adjuster_row = QHBoxLayout()
+        self.addLayout(self.adjuster_row)
+
+        self.minus_button = QPushButton('-')
+        self.minus_button.clicked.connect(self.decrease_attribute)
+
+        self.modifier_label = QLabel()
+        self.plus_button = QPushButton('+')
+        self.plus_button.clicked.connect(self.increase_attribute)
+
+        for w in [self.minus_button, self.modifier_label, self.plus_button]:
+            self.adjuster_row.addWidget(w)
+
+        self.attribtue_display = QLabel()
+        self.update_attribute_display()
+        self.addWidget(self.attribtue_display)
+        return
+    
+    def update_attribute_display(self):
+        self.attribtue_display.setText(str(self.value))
+        modifier = (self.value - 10)//2
+        self.modifier_label.setText(str(modifier))
+        return
+    
+    def increase_attribute(self):
+        self.value += 1
+        self.update_attribute_display()
+        return
+    
+    def decrease_attribute(self):
+        self.value -= 1
+        self.update_attribute_display()
+        return
+
+class AttributeCheck(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        layout = QVBoxLayout()
+
+        #number of check boxes based on the the attribute like how in ResultWidget, the second combo box has different number of options
+        # when checked, the proficiency bonus should be added to the modifier that the attribute display has
+        self.check_box = QCheckBox()
