@@ -1,7 +1,5 @@
-#from src.interfaceTest import main
-#from pathlib import Path
 import sys
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QLabel,
+from PyQt5.QtWidgets import (QWidget, QLabel,
                              QLineEdit, QHBoxLayout, QVBoxLayout)
 from src.qtcomponents import LabelTextEditWidget
 from src.qtcomponents import ImageUploadWidget

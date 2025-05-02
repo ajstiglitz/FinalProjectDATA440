@@ -1,10 +1,14 @@
 import sys
 
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QGridLayout, 
-                             QTabWidget, QWidget, QVBoxLayout, QLabel, QComboBox,
-                             QCheckBox, QLineEdit, QFormLayout, QFrame)
+from PyQt5.QtWidgets import (QMainWindow, QApplication,  
+                             QTabWidget, QWidget, QVBoxLayout, QComboBox)
 
 from PyQt5.QtCore import Qt
+
+from tabtwotest import CharacterInfoTab
+
+from tabonetest import RollerTab
+
 
 #from qtcomponents import WindowWithVerticalSlots
 
@@ -34,30 +38,8 @@ class MainWindow(QMainWindow):
         self.tab_widget.addTab(tab1, "Dice Roller")
 
         #tab 2
-        tab2 = QWidget()
-        layout_tab2 = QVBoxLayout()
-        tab2.setLayout(layout_tab2)
-        self.tab_widget.addTab(tab2, "Character Info")
-#        layout_tab2.addWidget()
-
-
-        label2 = QLabel()
-        label2.setFrameStyle(QFrame.Panel | QFrame.Sunken)
-        label2.setText("TEXT TEST")
-        label2.setAlignment(Qt.AlignTop | Qt.AlignLeft)
-        layout_tab2.addWidget(label2)
-
-        label2_2 = QLabel()
-        label2_2.setFrameStyle(QFrame.Panel | QFrame.Sunken)
-        label2_2.setText("TESTING")
-        label2_2.setAlignment(Qt.AlignTop | Qt.AlignCenter)
-        layout_tab2.addWidget(label2_2)
-
-        label2_2_2 = QLabel()
-        label2_2_2.setFrameStyle(QFrame.Panel | QFrame.Sunken)
-        label2_2_2.setText("TESTING AGAIN")
-        label2_2_2.setAlignment(Qt.AlignTop | Qt.AlignRight)
-        layout_tab2.addWidget(label2_2_2)
+        character_info_tab = CharacterInfoTab()
+        self.tab_widget.addTab(character_info_tab, "Character Info")
 
 
         #tab 3

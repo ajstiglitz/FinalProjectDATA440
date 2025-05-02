@@ -28,7 +28,6 @@ class MainWindow(QMainWindow):
         #ComboBox to select between dice
         self.dice_selector = QComboBox()
         self.dice_selector.addItems(["D20", "D12", "D10", "D8", "D6", "D4"])
-        self.dice_selector.setFixedSize(100,30)
 
         #tab setup
         tab1.setLayout(layout_tab1)

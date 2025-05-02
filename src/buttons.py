@@ -3,6 +3,25 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
 
 from PyQt5.QtCore import Qt
  
+class CombinedProfInsp(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        layout = QVBoxLayout()
+
+        self.proficiency_bonus = ButtonsUpdateLabel()
+
+        self.inspiration = CheckBoxAndLabel()
+
+        layout.addWidget(self.proficiency_bonus)
+        layout.addWidget(self.inspiration)
+
+        self.setLayout(layout)
+
+
+# EDIT THE SIZE OF THE BUTTONS TO BE FIXED.
+#probably setGeometry() or something. 
+
 #for Tab 1. Meant to go at the top right corner
 class ButtonsUpdateLabel(QWidget):
     #proficiency bonus widget
