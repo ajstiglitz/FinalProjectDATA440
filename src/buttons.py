@@ -78,6 +78,7 @@ class ButtonsUpdateLabel(QWidget):
         #button_layout.addWidget(self.prof_bonus_label)
 
         self.proficiency_display = QLabel()
+        self.proficiency_display.setAlignment(Qt.AlignCenter)
         self.update_prof_display()
         button_layout.addWidget(self.proficiency_display)
 

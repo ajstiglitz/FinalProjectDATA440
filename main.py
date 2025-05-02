@@ -1,9 +1,9 @@
 import sys
 
-from PyQt5.QtWidgets import (QMainWindow, QApplication,  
-                             QTabWidget, QWidget, QVBoxLayout, QComboBox)
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QLabel,
+                             QTabWidget, QWidget, QHBoxLayout)
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import *
 
 from tabtwotest import CharacterInfoTab
 
@@ -36,7 +36,18 @@ class MainWindow(QMainWindow):
 
         #tab 3
         tab3 = QWidget()
-        layout_tab3 = QVBoxLayout()
+        layout_tab3 = QHBoxLayout()
+        label_test = QLabel("FILLER")
+        layout_tab3.addWidget(label_test)
+
+        label_style_test = QLabel("Testing Style Sheet")
+        label_style_test.setStyleSheet("background-color:ivory; border: 10px black")
+
+
+
+
+        layout_tab3.addWidget(label_style_test)
+
         tab3.setLayout(layout_tab3)
         self.tab_widget.addTab(tab3, "Visualization")
 

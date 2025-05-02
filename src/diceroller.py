@@ -74,6 +74,7 @@ class RollerBoxWidget(QWidget):
         self.gif_height = 400
 
         self.die_gif = QLabel()
+        self.die_gif.setAlignment(Qt.AlignCenter)
         self.die_gif.setFixedSize(400,400)
         self.gif = QMovie(os.path.join("src","gifs","d20.gif"))
         self.die_gif.setMovie(self.gif)
