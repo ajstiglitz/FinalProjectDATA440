@@ -2,7 +2,15 @@
 ---
 
 ### Description
-The purpose of this code is to create a Graphical User Interface (or GUI) for 
+The purpose of this code is to create a Graphical User Interface (or GUI) that has the functionality of a dice roller, a player sheet, and a plot-creator. 
+
+The dice availble to roll include a four-sided die, six-sided die, an eight-sided die, a ten-sided die, a twelve-sided die, and a twenty-sided die. 
+
+The player sheet allows the user to import a picture of their player, and text boxes to fill out characteristics like Name, Class, Race, Alignment, Level, and Age. There are also places to input the player inventory, the character's features and traits, as well as other proficiencies and languages.
+
+The plot-creator allows the user to test different scenarios related to dice rolls to check compare the distribution of variances.
+
+The GUI is intended for use alongside the tabletop role-playing game Dungeons & Dragons.
 
 - talk about what DnD is briefly
 - possible link to either a dnd wiki or the dnd page
@@ -19,10 +27,14 @@ The purpose of this code is to create a Graphical User Interface (or GUI) for
 - then cd FinalProjectData440
 - from there you can do 'uv run main.py' and the GUI should open up for you.
 
+---
+
 ### Quickstart
 - explain what version of python this repository uses, as well as the other libraries like matplotlib, PyQt5, numpy, and if anything else is used talk about that
 - also mention that there are some extra libraries like PyGame which are not used but are present because they were there planned to be used initially but later became obsolete
 - provide a link to the uv website for more commands
+
+---
 
 ### Folders of FinalProjectDATA440 Repository
 - this needs to be done cleaner once I delete the useless files
