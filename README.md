@@ -2,7 +2,7 @@
 ---
 
 ### Description
-The purpose of this code is to create a Graphical User Interface (or GUI) that has the functionality of a dice roller, a player sheet, and a plot-creator. 
+The purpose of this code is to create a Graphical User Interface (or GUI) using Python's PyQt5 library that has the functionality of a dice roller, a player sheet, and a plot-creator. 
 
 The dice availble to roll include a four-sided die, six-sided die, an eight-sided die, a ten-sided die, a twelve-sided die, and a twenty-sided die. 
 
@@ -10,11 +10,17 @@ The player sheet allows the user to import a picture of their player, and text b
 
 The plot-creator allows the user to test different scenarios related to dice rolls to check compare the distribution of variances.
 
-The GUI is intended for use alongside the tabletop role-playing game Dungeons & Dragons.
+The GUI is intended for use alongside the tabletop role-playing game Dungeons & Dragons (DND). DND is a fantasy game where players can create their own characters and roleplay as them going on adventures. Attached to these characters are what's known as "Ability Scores," which include Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma.
+These ability scores can vary depending on Race, Class, and/or Level, and depending on how high or low a score is, you may have to add or subtract a value from a dice roll.
 
-- talk about what DnD is briefly
-- possible link to either a dnd wiki or the dnd page
-- talk about the PyQt5 llibrary in python I guess
+#### Purpose:
+The reason for the creation of this GUI was to make the calculation of dice rolls with the modifiers easier for players. Instead of having to do it by hand, this interface is meant to automatically calculate the results of a roll based on a player's ability scores.
+
+Additionally, it also keeps the character information easily available.
+
+Link to DND Official Site: https://dndstore.wizards.com/us/en
+
+Link to DND Wikipedia page: https://en.wikipedia.org/wiki/Dungeons_%26_Dragons
 
 ---
 
