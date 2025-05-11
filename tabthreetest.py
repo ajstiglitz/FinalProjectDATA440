@@ -1,12 +1,12 @@
 import sys
-from PyQt5.QtWidgets import (QWidget, QLabel, QMainWindow, QApplication, QGridLayout,
+from PyQt5.QtWidgets import (QWidget, QLabel, QMainWindow, QApplication, QGridLayout, QPushButton,
                              QLineEdit, QHBoxLayout, QVBoxLayout, QDialog, QFileDialog)
 
 from PyQt5.QtGui import QIntValidator
 
-from src.plots import *
-
 from typing import Callable
+
+from PyQt5.QtCore import Qt
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -354,7 +354,6 @@ class GraphButtons(QWidget):
             self.plot_interface.draw_plot(combos)        
 
     def save_graph(self)-> None:
-        #add functionality
         pass
 
 
