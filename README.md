@@ -106,10 +106,10 @@ This file has different classes all related to the creation and assembly of the 
 
 ### Links to resources/code used in the project
 - The drag and drop code was gotten from stack exchange. The comment in the file 'qtcomponents.py' that says "*Check README* refers to the link below where the code was found:
-    - LINK: https://stackoverflow.com/questions/60614561/how-to-ask-user-to-input-an-image-in-pyqt5 
+    - Link: https://stackoverflow.com/questions/60614561/how-to-ask-user-to-input-an-image-in-pyqt5 
 - Here are some links to the PyQT5 websites used that explained how to use the different elements:
     - Link: https://www.riverbankcomputing.com/static/Docs/PyQt5/
     - Link: https://doc.qt.io/qtforpython-6/ 
 - And here is a link to the style sheet that was used in this project:
     - https://github.com/GTRONICK/QSS/blob/master/ManjaroMix.qss
-    - The file was renamed to 'style.qss' because the style sheet used before the one above was named that already in the code.
+        - The file was renamed to 'style.qss' because the style sheet used before the one above was named that already in the code.
