@@ -105,7 +105,7 @@ This file has different classes all related to the creation and assembly of the 
 ---
 
 ### Links to resources/code used in the project
-- The drag and drop code was gotten from stack exchange. The comment in the file 'qtcomponents.py' that says "*Check README* refers to the link below where the code was found:
+- The drag and drop code was gotten from stack exchange. The comment in the file 'qtcomponents.py' that says "*Check README*" refers to the link below where the code was found:
     - Link: https://stackoverflow.com/questions/60614561/how-to-ask-user-to-input-an-image-in-pyqt5 
 - Here are some links to the PyQT5 websites used that explained how to use the different elements:
     - Link: https://www.riverbankcomputing.com/static/Docs/PyQt5/

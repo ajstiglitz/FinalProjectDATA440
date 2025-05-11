@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
-                             QPushButton, QHBoxLayout, QComboBox, QMainWindow)
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel,
+                             QPushButton, QHBoxLayout, QComboBox)
 from PyQt5.QtCore import Qt, pyqtSignal, QSize
 from PyQt5.QtGui import QMovie
 
@@ -11,6 +11,12 @@ import os
 
 # Tab 1-specific widgets
 class SimulatedDice:
+    """
+    This class creates the random number generators that represent the different dice.
+    The dice that can be generated are the D4, D6, D8, D10, D12, and D20.
+    """
+
+    #The static methods are so that we don't use self. Can't be overridden.
     @staticmethod
     def DTwenty():
         rand_num = random.randint(1,20)
@@ -42,7 +48,12 @@ class SimulatedDice:
         return rand_num
 
 class RollerBoxWidget(QWidget):
-    roll_made = pyqtSignal(int) #signal to emit rolled value
+    """
+    This class 
+    """
+    #Signal to emit rolled value
+    roll_made = pyqtSignal(int) 
+
     def __init__(self):
         super().__init__()
 
@@ -50,53 +61,62 @@ class RollerBoxWidget(QWidget):
         #simulated should roll with click of button
         #result should be saved for results
 
-        #initializing
+        #Initializing the first roll
         self.last_roll = None
 
-        #dice roller label
+        #Dice roller label
         self.label = QLabel("Dice Roller")
 
-        #list of the different drop downs for the combo box
+        #List of the different drop downs for the combo box
         item_list = ["D20","D12","D10","D8","D6","D4"]
         self.combo_box = QComboBox()
         self.combo_box.setFixedSize(100,30)
         self.combo_box.addItems(item_list)
         self.combo_box.setCurrentIndex(0)
-        #based on what die is chosen, gif is changed.
+
+        #Based on what die is chosen, gif is changed
         self.combo_box.currentIndexChanged.connect(self.update_image)
 
+        #Layout is horizontal and the label and combobox widgets are added to the layout
         top_layout = QHBoxLayout()
         top_layout.addWidget(self.label)
         top_layout.addWidget(self.combo_box)
 
-        #the gifs
+        #The gif size is set
         self.gif_width = 400
         self.gif_height = 400
 
+        #A Label for the gifs
         self.die_gif = QLabel()
+        #Alignment and size set for the gifs
         self.die_gif.setAlignment(Qt.AlignCenter)
-        self.die_gif.setFixedSize(400,400)
+        self.die_gif.setFixedSize(self.gif_width, self.gif_height)
+        
+        #First gif that appears is the d20 gif
         self.gif = QMovie(os.path.join("src","gifs","d20.gif"))
+        #Sets the gif
         self.die_gif.setMovie(self.gif)
+        #Starts the gif so that it moves
         self.gif.start()    
 
-        #button to roll the die
+        #Button to roll the die
         self.button = QPushButton("Roll")
+        #When clicked the die is rolled
         self.button.clicked.connect(self.roll_die)
 
-        #layout for the widget
+        #Layout for the widget
         layout = QVBoxLayout()
         layout.addLayout(top_layout)
         layout.addWidget(self.die_gif)
         layout.addWidget(self.button)
 
+        #Layout set so that the widgets appear
         self.setLayout(layout)
 
     def roll_die(self):
-        # should roll one of the functions from the SimulatedDice class
-        #This i had to get external help with because pyqt5Signal was a little confusing
-        #it seems to be related to getting more advanced signals than just a button press (?)
+        # This function rolls one of the functions from the SimulatedDice class
         die = self.combo_box.currentText()
+        #Depending on which dice it is, the function called will change
         result = {
             "D20": SimulatedDice.DTwenty,
             "D12": SimulatedDice.DTwelve,
@@ -105,60 +125,84 @@ class RollerBoxWidget(QWidget):
             "D6": SimulatedDice.DSix,
             "D4": SimulatedDice.DFour
         }[die]()
+        #Gives the result
         self.roll_made.emit(result)
 
 
     def update_image(self):
-        # this should update the image (gif) shown based on the dice chosen from the combo box.
+        #This function updates the image (gif) shown based on the dice chosen from the combo box.
         die = self.combo_box.currentText()
         gif_path = os.path.join("src","gifs",f"{die}.gif")
 
+        #The previous gif stops
         self.gif.stop()
+        #New gif QMovie instance created with the correct gif
         self.gif = QMovie(gif_path)
 
+        #Gif scaled
         self.gif.setScaledSize(QSize(self.gif_width, self.gif_height))
-
         self.die_gif.setMovie(self.gif)
+        #Gif movement started
         self.gif.start()
 
 
 class ResultWidget(QWidget):
+    """
+    This class assembles the widgets for the results.
+    """
     def __init__(self):
         super().__init__()
 
+        #Combobox created with the different possible attributes
         self.combo_box_attribute = QComboBox()
+        #The size is set
         self.combo_box_attribute.setFixedSize(100,30)
+        #Items in the dropdown
         self.combo_box_attribute.addItems(["STR", "DEX", "CONS", "INT", "WIS", "CHA"])
+        #Changes what is shown in the second combobox based on the first dropdown
         self.combo_box_attribute.currentIndexChanged.connect(self.update_second_combo)
 
+        #This is the second combo box
         self.combo_2 = QComboBox()
+        #Size is fixed
         self.combo_2.setFixedSize(100,30)
 
-        #maybe make conditional on the d20
+        #Label initialized
         self.result_label = QLabel("Result of STR : Athletics")
+        #aligned to the center
         self.result_label.setAlignment(Qt.AlignCenter)
+        #Label initialized with 0
         self.value_label = QLabel("0")
+        #Alignment set to the center
         self.value_label.setAlignment(Qt.AlignCenter)
 
+        #The layout is vertical
         layout = QVBoxLayout()
+        #Widgets are added
         layout.addWidget(self.combo_box_attribute)
         layout.addWidget(self.combo_2)
         layout.addWidget(self.result_label)
         layout.addWidget(self.value_label)
 
+        #Interface is set to make the widgets appear
         self.setLayout(layout)
 
+        #The index of the second widget is set to 0, since all of the abilities have "Saving Throw" as an option
         self.update_second_combo(0)
 
     def update_second_combo(self,index):
-        #clear previous results
+        #This function should update what the second dropdown shows based on the first
+
+        #Clears previous results
         self.combo_2.clear()
 
         if index == 0: #STR
+            #possible choice is: saving throw, athletics
             self.str_attribute_list = ["Saving Throw", "Athletics"]
             self.combo_2.addItems(self.str_attribute_list)
 
         elif index == 1: #DEX
+            #possible choice is: saving throw, acrobatics, sleight of hand, stealth
             self.dex_attribute_list = ["Saving Throw", "Acrobatics", "Sleight of Hand", "Stealth"]
             self.combo_2.addItems(self.dex_attribute_list)
 
@@ -185,19 +229,25 @@ class ResultWidget(QWidget):
         self.update_result_label(0)
 
     def update_result_label(self, value):
-        #should be a number. based on the roll of the die and the choice from the combo 2.
-        # example: if a d20 rolled a 10, and the combo chosen was str: athletics and the player has a +2 and the proficiency checked (lets say another +2)
-        # then the resulting roll should be 10 + 2 + 2 which would be 14
+        #This function is based on the roll of the die and the choice from the combo 2.
+        # example: if a d20 rolled a 10, and the combo chosen was str: athletics and the player has a +4 and the proficiency checked (lets say another +2)
+        # then the resulting roll should be 10 + 4 + 2 which would be 16
         # result should come out as a label. 
 
-        #maybe only have it appear when combo box is on d20, then the result probably is fine...
+        #Right now the roll doesnt seem to add anything
+        #Add a secondary label to show the roll of the die (So that you know if you rolled a nat one)
+
         stat = self.combo_box_attribute.currentText()
         attribute = self.combo_2.currentText()
+        #Label for the attribute and the skill being rolled for
         self.result_label.setText(f"Result of {stat} : {attribute}")
+        #Sets the label to the resulting value
         self.value_label.setText(str(value))
 
-#Debugging class
 class WindowCheck(QWidget):
+    """
+    This class Assembles the widgets in order to be used by the tabone.py file.
+    """
     def __init__(self):
         super().__init__()
 

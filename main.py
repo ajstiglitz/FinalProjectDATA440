@@ -4,34 +4,48 @@ from PyQt5.QtWidgets import (QMainWindow, QApplication, QTabWidget)
 
 from PyQt5.QtGui import *
 
-from src.tabtwo import CharacterInfoTab
 from src.tabone import RollerTab
+from src.tabtwo import CharacterInfoTab
 from src.tabthree import GraphTab
 
 #The MainWindow which contains all of the compoments for the GUI
 class MainWindow(QMainWindow):
+    """
+    This class creates the main window for the GUI.
+    It is where all of the different components/elements will appear.
+    """
     def __init__(self):
         super().__init__()
 
+        #Sets the title of the window
         self.setWindowTitle("DiceRoller")
 
+        #Adding an icon-- need to move icon to a good folder
+        #self.setWindowIcon(QIcon('icon.png'))
+
         self.tab_widget = QTabWidget()
+        #Sets the direction of the tabs. If you wanted them at the top, change 'West' to 'North'
+        #If you want them to the right, set it to 'East'
         self.tab_widget.setTabPosition(QTabWidget.West)
 
         self.setCentralWidget(self.tab_widget)
         self.create_tabs()
 
     def create_tabs(self):
-        #tab 1 - for the dice roller and ability scores
+        """
+        This function calls the instances of the classes that have 
+        all the assembled widgets for the different tabs.
+        """
+        #Tab 1 - for the dice roller and ability scores
         dice_roller_tab = RollerTab()
         self.tab_widget.addTab(dice_roller_tab, "Dice Roller")
 
-        #tab 2
+        #Tab 2 - for the character sheet
         character_info_tab = CharacterInfoTab()
         self.tab_widget.addTab(character_info_tab, "Character Info")
 
 
-        #tab 3
+        #Tab 3 - for the graph-creator
         grapher_tab = GraphTab()
         self.tab_widget.addTab(grapher_tab, "Grapher")
 

@@ -5,6 +5,10 @@ from src.diceroller import WindowCheck
 #this is the assembly test for tab1 before adding it to main.py
 
 class RollerTab(QWidget):
+    """
+    This class is for the complete assembly in the correct layout 
+    of the different widgets to be used in Tab 1.
+    """
     def __init__(self):
         super().__init__()
 
