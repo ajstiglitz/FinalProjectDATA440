@@ -4,9 +4,9 @@ from PyQt5.QtWidgets import (QMainWindow, QApplication, QTabWidget)
 
 from PyQt5.QtGui import *
 
-from src.tabtwotest import CharacterInfoTab
-from src.tabonetest import RollerTab
-from src.tabthreetest import GraphTab
+from src.tabtwo import CharacterInfoTab
+from src.tabone import RollerTab
+from src.tabthree import GraphTab
 
 
 #from qtcomponents import WindowWithVerticalSlots
