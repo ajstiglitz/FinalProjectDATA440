@@ -8,9 +8,7 @@ from src.tabtwo import CharacterInfoTab
 from src.tabone import RollerTab
 from src.tabthree import GraphTab
 
-
-#from qtcomponents import WindowWithVerticalSlots
-
+#The MainWindow which contains all of the compoments for the GUI
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -43,7 +41,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    #uses a qss style sheet. Need to look online and cycle through some to see what colors look best.
+    #A qss style sheet to change how the standard GUI looks
     with open("style.qss", "r") as f:
         _style = f.read()
         app.setStyleSheet(_style)

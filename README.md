@@ -25,17 +25,28 @@ Link to DND Wikipedia page: https://en.wikipedia.org/wiki/Dungeons_%26_Dragons
 ---
 
 ### How to use the Project
-- contains a main.py file which just needs to be run in the command line to make the gui appear
-- maybe add some comments in the main.py on how to run the project?
-- make sure you cd into the right folder 
-- so if FinalProjectData440 is just sitting in your downloads folder and your are on C:\Users\YourUser when you open the command line
-- do cd Downloads
-- then cd FinalProjectData440
-- from there you can do 'uv run main.py' and the GUI should open up for you.
+This project contains a main.py file which is run in the command line to make the GUI appear.
+
+To run the project, make sure that you are in the correct directory before trying to run the program, or you will end up with an error.
+
+For example, if FinalProjectData440 is sitting in your Downloads folder, and your are in the C:\Users\YourUser directory when you open the command line, do the command 'cd Downloads'
+
+Your resulting filepath would then look something like: C:\Users\YourUser\Downloads
+
+From there, call cd FinalProjectData440 to get into the repository.
+
+Once you are in the correct folder, use the command 'uv run main.py' and the GUI should open up for you.
+
+This project uses a virtual environment that contains all of the needed Python libraries to get the code working.
+
+Link for more information about uv virtual environments: https://docs.astral.sh/uv/pip/environments/
 
 ---
 
 ### Quickstart
+This project uses Python version 3.12, Matplotlib version 3.10.1, Numpy version 2.2.4, and PyQt5_Qt5 version 5.15.2 (though there is also a file PyQt5 version 5.15.11.dist-info which contains metadata of a package).
+
+This project also has some extra libraries present 
 - explain what version of python this repository uses, as well as the other libraries like matplotlib, PyQt5, numpy, and if anything else is used talk about that
 - also mention that there are some extra libraries like PyGame which are not used but are present because they were there planned to be used initially but later became obsolete
 - provide a link to the uv website for more commands
