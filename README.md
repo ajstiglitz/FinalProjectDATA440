@@ -46,22 +46,29 @@ Link for more information about uv virtual environments: https://docs.astral.sh/
 ### Quickstart
 This project uses Python version 3.12, Matplotlib version 3.10.1, Numpy version 2.2.4, and PyQt5_Qt5 version 5.15.2 (though there is also a file PyQt5 version 5.15.11.dist-info which contains metadata of a package).
 
-This project also has some extra libraries present 
-- explain what version of python this repository uses, as well as the other libraries like matplotlib, PyQt5, numpy, and if anything else is used talk about that
-- also mention that there are some extra libraries like PyGame which are not used but are present because they were there planned to be used initially but later became obsolete
-- provide a link to the uv website for more commands
+This project also has some extra libraries present like Pandas and PyGame because in the initial conception of the project there was an intent to integrate the PyGame library into the interface (though this ended up not happening).
 
 ---
 
 ### Folders of FinalProjectDATA440 Repository
-- this needs to be done cleaner once I delete the useless files
 - figures/
-    - where the plots can be saved to
+    - Where the plots are saved to from the graphing tab
 - src/
-    - contains the code for:
-        - ...
+    - gifs/
+        - This file contains the gifs for the dice roller.
+    - The src folder contains the code for:
+        - Creating a loading the attributes for tab one.
+        - The code for the "Inspired" checkbox and proficiency label for tab one.
+        - The random number generators that represent the different dice for tab one.
+        - The working dice roller code and the resulting labels for tab one.
+        - Showing the gifs of the dice for tab one.
+        - A general helper file that can be used for checking directories.
+        - A file for letting the user upload a photo for their charater for tab two.
+        - The interface creation and implementation for tab one.
+        - The interface creation and implementation for tab two.
+        - The interface creation and implementation for tab three.
 - writeup/
-    - the final writeup for the project. Contains more info on the math behind the project and the basis for it (NOTE: refine later)
+    - This folder contains the final writeup for the project. The writeup has more information on the math behind the graphs in tab three, and the basis for the project itself.
 
 ---
 
@@ -69,49 +76,40 @@ This project also has some extra libraries present
 1. buttons.py
 2. diceroller.py
 3. helpers.py
-4. interface.py
-5. interfaceTest.py
-6. plots.py
-7. qtcomponents.py
+4. qtcomponents.py
+5. tabone.py
+6. tabthree.py
+7. tabtwo.py
 
-NOTE: will probably have to rename a bunch of these files to make them more intuitive. Especially the ones with 'test' in the name since they aren't tests anymore
+### 1) buttons
+The purpose of this file is to create and assemble the some elements used by tab one. Specifically the attribute adjuster, the proficiency bonus adjuster, and the inspiration checkbox.
+
+### 2) diceroller
+The purpose of this file is to create and assemble the some elements used by tab one. Specifically, the random number generators for the different die (D4, D6, D8, D10, D12, and D20), the gif visual that appears depending on the die the user chose, the roll results, and the dropdown that chooses the attributes that is being rolled for.
+
+### 3) helpers
+The purpose of this file is to check if a directory exists, and if not, to create it.
+
+### 4) qtcomponents
+This file contains classes related to uploading images by the user to be used in tab three.
+
+### 5) tabone
+This file has different classes all related to the creation and assembly of the PyQt5 components for tab one in the GUI.
+
+### 6) tabthree
+This file has different classes all related to the creation and assembly of the PyQt5 components for tab three in the GUI.
+
+### 7) tabtwo
+This file has different classes all related to the creation and assembly of the PyQt5 components for tab two in the GUI.
 
 ---
 
 ### Links to resources/code used in the project
-- the drag and drop code was gotten from stack exchange, so make sure to have a comment in the file leading back to here in the README with a link to that code
-- also probably the PyQT5 website 
-
----
-### GENERAL NOTES:
-
-what needs to be included here:
-- should be focused on high-level overview 
-- contain instructinos for others to use the code
-- the writeup (which will be in a different folder) will have the additional background, more details about the data and methods, and discuss other conclusions/future work where applicable
-- in my case the data will be about the math behind the plots and the advantage in terms of the distribution of max(X, x)
-- file in folder for 'writeup' is just a placeholder to make it appear on git. shows the math i did by hand before coding
-
-Overview includes:
-- purpose of project
-- language it's written in
-- what it does and why it is useful
-- Project requirements
-
-
-What needs to be moved from the main repository into folders:
-- tabonetest.py
-- tabtwotest.py
-- tabthreetest.py
-- style.qss
-    - might need to remove the style.qss and go into the widgets to add style, since it is not looking how I want.
-
-NOTE: will need to remember to refactor the files when moved otherwise it won't work anymore
-
-What needs to be added
-- a saved graph into figures
-
-What needs to be deleted:
-- the D20Pygame.py
-- the 'Dice' Folder
-- 'data' folder also probably can be deleted. I am using arrays and not a .csv to read in the dice for the plot
+- The drag and drop code was gotten from stack exchange. The comment in the file 'qtcomponents.py' that says "*Check README* refers to the link below where the code was found:
+    - LINK: https://stackoverflow.com/questions/60614561/how-to-ask-user-to-input-an-image-in-pyqt5 
+- Here are some links to the PyQT5 websites used that explained how to use the different elements:
+    - Link: https://www.riverbankcomputing.com/static/Docs/PyQt5/
+    - Link: https://doc.qt.io/qtforpython-6/ 
+- And here is a link to the style sheet that was used in this project:
+    - https://github.com/GTRONICK/QSS/blob/master/ManjaroMix.qss
+    - The file was renamed to 'style.qss' because the style sheet used before the one above was named that already in the code.

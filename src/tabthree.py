@@ -14,6 +14,8 @@ from datetime import datetime as dt
 
 import numpy as np
 
+from src.helpers import check_directory
+
 import os
 
 PATH_FIGURES = 'figures'
@@ -173,8 +175,7 @@ class ModifierWidget(QWidget):
 
         self.lineEdit = QLineEdit()
 
-        #mask was adding spaces which was annoying
-        #found this instead, testing
+        # makes sure thta what the user input was really a reasonable number
         self.lineEdit.setValidator(QIntValidator(-999, 999))
         layout.addWidget(self.lineEdit)
 
@@ -356,7 +357,7 @@ class GraphButtons(QWidget):
 
     def save_graph(self)-> None:
         # Ensure the folder exists
-        os.makedirs(PATH_FIGURES, exist_ok=True)
+        check_directory(PATH_FIGURES)
 
         # Generate timestamped filename
         ts = timestamp()

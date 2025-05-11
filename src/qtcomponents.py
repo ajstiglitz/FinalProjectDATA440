@@ -22,7 +22,7 @@ class LabelTextEditWidget(QWidget):
 
         self.setLayout(layout)
 
-# This code was gotten from here: https://stackoverflow.com/questions/60614561/how-to-ask-user-to-input-an-image-in-pyqt5
+# *Check README Links to resources section*
 class PhotoLabel(QLabel):
     def __init__(self):
         super().__init__()
