@@ -4,11 +4,11 @@
 ### Description
 The purpose of this code is to create a Graphical User Interface (or GUI) using Python's PyQt5 library that has the functionality of a dice roller, a player sheet, and a plot-creator. 
 
-The dice availble to roll include a four-sided die, six-sided die, an eight-sided die, a ten-sided die, a twelve-sided die, and a twenty-sided die. 
+The dice available to roll include a four-sided die, six-sided die, an eight-sided die, a ten-sided die, a twelve-sided die, and a twenty-sided die. 
 
 The player sheet allows the user to import a picture of their player, and text boxes to fill out characteristics like Name, Class, Race, Alignment, Level, and Age. There are also places to input the player inventory, the character's features and traits, as well as other proficiencies and languages.
 
-The plot-creator allows the user to test different scenarios related to dice rolls to check compare the distribution of variances.
+The plot-creator allows the user to test different scenarios related to dice rolls to compare the distribution of variances.
 
 The GUI is intended for use alongside the tabletop role-playing game Dungeons & Dragons (DND). DND is a fantasy game where players can create their own characters and roleplay as them going on adventures. Attached to these characters are what's known as "Ability Scores," which include Strength, Dexterity, Constitution, Intelligence, Wisdom, and Charisma.
 These ability scores can vary depending on Race, Class, and/or Level, and depending on how high or low a score is, you may have to add or subtract a value from a dice roll.

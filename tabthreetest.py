@@ -1,14 +1,25 @@
 import sys
 from PyQt5.QtWidgets import (QWidget, QLabel, QMainWindow, QApplication, QGridLayout,
-                             QLineEdit, QHBoxLayout, QVBoxLayout, QDialog)
+                             QLineEdit, QHBoxLayout, QVBoxLayout, QDialog, QFileDialog)
+
+from PyQt5.QtGui import QIntValidator
 
 from src.plots import *
 
 from typing import Callable
 
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+import numpy as np
+
+#use in the save_graph function
+from src.helpers import check_directory
+
+PATH_FIGURES = 'figures'
+
 #this is the assembly test for tab3 before adding it to main.py
 #move later into src
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -19,11 +30,25 @@ class MainWindow(QMainWindow):
         main_widget = QWidget()
         #self.setCentralWidget(self.main_widget)
 
-        layout = QVBoxLayout(main_widget)
+        main_layout = QVBoxLayout(main_widget)
 
-        self.button = ButtonPopOut()
+        layout = QHBoxLayout()
 
-        layout.addWidget(self.button)
+        self.scenarioOneWidget = Scenario("Scenario 1")
+
+        self.scenarioTwoWidget = Scenario("Scenario 2")
+
+        #modifier widget isnt appearing so theres something wrong with it.
+        layout.addWidget(self.scenarioOneWidget)
+        layout.addWidget(self.scenarioTwoWidget)
+
+        main_layout.addLayout(layout)
+
+        #here is where the plot widget goes
+        self.plotWidget = PlotInterface()
+
+        main_layout.addWidget(self.plotWidget)
+
 
         self.setCentralWidget(main_widget)
 
@@ -38,10 +63,13 @@ class Scenario(QWidget):
     def __init__(self, name:str):
         super().__init__()
 
+        self.dice_array = []
+        self.name = name
+
         layout = QVBoxLayout()
 
         #set the size later for stylization
-        self.label = QLabel()
+        self.label = QLabel(self.name)
         self.label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.label)
 
@@ -52,21 +80,38 @@ class Scenario(QWidget):
         #button for pop-out to get the diceAdjuster grid
         # the results from the grid should be applied to the
         #scenario to be used by the plot
-        self.button = ButtonPopOut()
+        self.button = ButtonPopOut(self.handle_dice_selection)
         layout.addWidget(self.button)
 
-        return
+        self.result_label = QLabel("Selected Dice: ")
+        layout.addWidget(self.result_label)
+
+        self.setLayout(layout)
+
+
+    def handle_dice_selection(self, results: list[int]):
+     self.dice_array = results
+     self.result_label.setText(f"Selected Dice: {self.dice_array}")
+     print(f"{self.name} - Dice Array: {self.dice_array}")       
+
+    def get_modifier(self) -> int:
+        return self.modWidget.get_modifier()
+
+    def get_dice_array(self) -> list[int]:
+        return self.dice_array
 
 class ButtonPopOut(QPushButton):
-    def __init__(self):
+    def __init__(self, callback: Callable[[list[int]], None]):
         super().__init__("Choose Dice")
+        #lets the parent widget retain the dice chosen (array information to be used later)
+        self.callback = callback
         self.clicked.connect(self.popup_window)
 
     def popup_window(self):
         popup = AdjusterPopup("Select Dice")
         if popup.exec_() == QDialog.Accepted:
             results = popup.get_array()
-            print("Selected Dice:", results)
+            self.callback(results)
 
 def configure_button(button: QPushButton,
                      command: Callable
@@ -139,11 +184,18 @@ class ModifierWidget(QWidget):
 
         self.lineEdit = QLineEdit()
 
-        #sets a mask, so that user can only input number
-        # decide later if I want to change first 0 to 9
-        #that would require user to put in number from 0-9
-        self.lineEdit.setInputMask("00000000")
+        #mask was adding spaces which was annoying
+        #found this instead, testing
+        self.lineEdit.setValidator(QIntValidator(-999, 999))
         layout.addWidget(self.lineEdit)
+
+        self.setLayout(layout)
+
+    def get_modifier(self)->int:
+        try:
+            return int(self.lineEdit.text())
+        except ValueError:
+            return 0
 
 class DiceAdjuster(QWidget):
     '''
@@ -177,8 +229,6 @@ class DiceAdjuster(QWidget):
         layout.addLayout(button_layout)
         self.setLayout(layout)
 
-
-    #
     def increase_attribute(self):
         self.value += 1
         self.value_label.setText(str(self.value))
@@ -194,6 +244,119 @@ class DiceAdjuster(QWidget):
     def get_dice_array(self)->list[int]:
         return [self.sides] * self.value
     
+
+class DiceCombo:
+    def __init__(self,
+                dice: list[int],
+                modifier: int):
+        
+        self.dice = dice
+        self.mod = modifier
+        self.make_pmf()
+
+
+    def make_pmf(self)->None:
+        self.p = [1/self.dice[0]]*self.dice[0]
+        for d in self.dice[1:]:
+            p = [1/d]*d
+            self.p = np.convolve(self.p, p)
+        self.outcomes = np.array(range(len(self.dice), sum(self.dice)+1)) + self.mod
+
+
+class PlotInterface(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #creating the figure and figure canvas (i think this is what it needs??)
+        self.figure = Figure(figsize=(5,4), dpi=100)
+        self.canvas = FigureCanvas(self.figure)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.canvas)
+
+        self.graph_buttons = GraphButtons(self)
+
+        layout.addWidget(self.graph_buttons)
+
+        self.setLayout(layout)
+
+    def draw_plot(self, scenarios: list[DiceCombo]):
+        self.figure.clear()
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        colors = ['skyblue', 'red']
+        for i, s in enumerate(scenarios):
+            ax.bar(s.outcomes, s.p, alpha=0.7, label=f"Combo {i+1}", color=colors[i % len(colors)])
+        ax.set_title("Dice Roll Probabilities")
+        ax.set_xlabel("Total")
+        ax.set_ylabel("Probability")
+        ax.legend()
+        self.canvas.draw()        
+
+    def reset_plot(self):
+        self.figure.clear()
+        self.canvas.draw()
+
+    def save_plot(self, filename: str):
+        if filename:
+            self.figure.savefig(filename)
+
+
+# class for button row that goes below the graph figure
+class GraphButtons(QWidget):
+    def __init__(self, plot_interface: PlotInterface):
+        super().__init__()
+
+        self.plot_interface = plot_interface
+
+        layout = QHBoxLayout()
+
+        self.reset_button = QPushButton("RESET")
+        self.reset_button.clicked.connect(self.reset_graph)
+
+        layout.addWidget(self.reset_button)
+
+        self.calc_button = QPushButton("CALCULATE")
+        self.calc_button.clicked.connect(self.calculate_graph)
+
+        layout.addWidget(self.calc_button)
+
+        self.save_button = QPushButton("SAVE")
+        self.save_button.clicked.connect(self.save_graph)
+        
+        layout.addWidget(self.save_button)
+
+        self.setLayout(layout)
+
+    def reset_graph(self)->None:
+        #this should clear the matplotlib graph and scenarios
+        #pass in 0's for the s1=[] and s2=[] to show an empty plot
+        self.plot_interface.reset_plot()
+
+    def calculate_graph(self)->None:
+        #this should take the into from scenarios 1 and 2 
+        #and calculate the info that will be put into matplotlib graph
+        main_window = self.plot_interface.parentWidget().parentWidget()
+
+        # Fetch dice and modifier arrays
+        s1_dice = main_window.scenarioOneWidget.get_dice_array()
+        s2_dice = main_window.scenarioTwoWidget.get_dice_array()
+        s1_mod = main_window.scenarioOneWidget.get_modifier()
+        s2_mod = main_window.scenarioTwoWidget.get_modifier()
+
+        combos = []
+        if s1_dice:
+            combos.append(DiceCombo(s1_dice, s1_mod))
+        if s2_dice:
+            combos.append(DiceCombo(s2_dice, s2_mod))
+
+        if combos:
+            self.plot_interface.draw_plot(combos)        
+
+    def save_graph(self)-> None:
+        #add functionality
+        pass
+
 
 if __name__ == "__main__":
     app = QApplication([])
