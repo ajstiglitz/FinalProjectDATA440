@@ -1,8 +1,7 @@
 import sys
 from PyQt5.QtWidgets import (QWidget, QLabel,
                              QLineEdit, QHBoxLayout, QVBoxLayout)
-from src.qtcomponents import LabelTextEditWidget
-from src.qtcomponents import ImageUploadWidget
+from src.qtcomponents import LabelTextEditWidget, ImageUploadWidget
 
 #Class for the main window. All I have so far is the window which should actually be in the second tab.
 #Need to digure out how to do that...

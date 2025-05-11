@@ -1,5 +1,4 @@
-import sys
-from PyQt5.QtWidgets import (QWidget, QLabel, QMainWindow, QApplication, QGridLayout, QPushButton,
+from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout, QPushButton,
                              QLineEdit, QHBoxLayout, QVBoxLayout, QDialog, QFileDialog)
 
 from PyQt5.QtGui import QIntValidator
@@ -11,7 +10,11 @@ from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
+from datetime import datetime as dt
+
 import numpy as np
+
+import os
 
 #use in the save_graph function
 from src.helpers import check_directory
@@ -20,40 +23,30 @@ PATH_FIGURES = 'figures'
 
 #this is the assembly test for tab3 before adding it to main.py
 #move later into src
-class MainWindow(QMainWindow):
+class GraphTab(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Window for Plotting")
-        self.setGeometry(100,100,800,600)
+        main_layout = QVBoxLayout()
 
-        main_widget = QWidget()
-        #self.setCentralWidget(self.main_widget)
-
-        main_layout = QVBoxLayout(main_widget)
-
-        layout = QHBoxLayout()
+        scenario_layout = QHBoxLayout()
 
         self.scenarioOneWidget = Scenario("Scenario 1")
 
         self.scenarioTwoWidget = Scenario("Scenario 2")
 
         #modifier widget isnt appearing so theres something wrong with it.
-        layout.addWidget(self.scenarioOneWidget)
-        layout.addWidget(self.scenarioTwoWidget)
+        scenario_layout.addWidget(self.scenarioOneWidget)
+        scenario_layout.addWidget(self.scenarioTwoWidget)
 
-        main_layout.addLayout(layout)
+        main_layout.addLayout(scenario_layout)
 
         #here is where the plot widget goes
-        self.plotWidget = PlotInterface()
+        self.plotWidget = PlotInterface(self)
 
         main_layout.addWidget(self.plotWidget)
 
-
-        self.setCentralWidget(main_widget)
-
-        return
-
+        self.setLayout(main_layout)
 
 
 class Scenario(QWidget):
@@ -264,8 +257,10 @@ class DiceCombo:
 
 
 class PlotInterface(QWidget):
-    def __init__(self):
+    def __init__(self, graph_tab: GraphTab):
         super().__init__()
+
+        self.graph_tab = graph_tab 
 
         #creating the figure and figure canvas (i think this is what it needs??)
         self.figure = Figure(figsize=(5,4), dpi=100)
@@ -274,7 +269,7 @@ class PlotInterface(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
 
-        self.graph_buttons = GraphButtons(self)
+        self.graph_buttons = GraphButtons(self, graph_tab)
 
         layout.addWidget(self.graph_buttons)
 
@@ -302,12 +297,23 @@ class PlotInterface(QWidget):
             self.figure.savefig(filename)
 
 
+#timestamp function for the file name
+def timestamp() -> str:
+    """
+    Creates a timestamp
+    """
+    t = str(dt.now())
+    r = t.replace(' ', '-').replace(':', '-').replace('.', '-')
+    return r
+
 # class for button row that goes below the graph figure
 class GraphButtons(QWidget):
-    def __init__(self, plot_interface: PlotInterface):
+    def __init__(self, plot_interface: PlotInterface, graph_tab: GraphTab):
         super().__init__()
 
         self.plot_interface = plot_interface
+
+        self.graph_tab = graph_tab
 
         layout = QHBoxLayout()
 
@@ -336,13 +342,12 @@ class GraphButtons(QWidget):
     def calculate_graph(self)->None:
         #this should take the into from scenarios 1 and 2 
         #and calculate the info that will be put into matplotlib graph
-        main_window = self.plot_interface.parentWidget().parentWidget()
 
         # Fetch dice and modifier arrays
-        s1_dice = main_window.scenarioOneWidget.get_dice_array()
-        s2_dice = main_window.scenarioTwoWidget.get_dice_array()
-        s1_mod = main_window.scenarioOneWidget.get_modifier()
-        s2_mod = main_window.scenarioTwoWidget.get_modifier()
+        s1_dice = self.graph_tab.scenarioOneWidget.get_dice_array()
+        s2_dice = self.graph_tab.scenarioTwoWidget.get_dice_array()
+        s1_mod = self.graph_tab.scenarioOneWidget.get_modifier()
+        s2_mod = self.graph_tab.scenarioTwoWidget.get_modifier()
 
         combos = []
         if s1_dice:
@@ -354,16 +359,12 @@ class GraphButtons(QWidget):
             self.plot_interface.draw_plot(combos)        
 
     def save_graph(self)-> None:
-        pass
+        # Ensure the folder exists
+        os.makedirs(PATH_FIGURES, exist_ok=True)
 
+        # Generate timestamped filename
+        ts = timestamp()
+        filename = os.path.join(PATH_FIGURES, f"plot_{ts}.png")
 
-if __name__ == "__main__":
-    app = QApplication([])
-    window = MainWindow()
-    window.show()
-
-    #with open("style.qss", "r") as f:
-    #    _style = f.read()
-    #    app.setStyleSheet(_style)
-
-    sys.exit(app.exec_())
+        # Save the figure
+        self.plot_interface.save_plot(filename)

@@ -5,9 +5,9 @@ from PyQt5.QtWidgets import (QMainWindow, QApplication, QLabel,
 
 from PyQt5.QtGui import *
 
-from tabtwotest import CharacterInfoTab
-
-from tabonetest import RollerTab
+from src.tabtwotest import CharacterInfoTab
+from src.tabonetest import RollerTab
+from src.tabthreetest import GraphTab
 
 
 #from qtcomponents import WindowWithVerticalSlots
@@ -35,21 +35,8 @@ class MainWindow(QMainWindow):
 
 
         #tab 3
-        tab3 = QWidget()
-        layout_tab3 = QHBoxLayout()
-        label_test = QLabel("FILLER")
-        layout_tab3.addWidget(label_test)
-
-        label_style_test = QLabel("Testing Style Sheet")
-        label_style_test.setStyleSheet("background-color:ivory; border: 10px black")
-
-
-
-
-        layout_tab3.addWidget(label_style_test)
-
-        tab3.setLayout(layout_tab3)
-        self.tab_widget.addTab(tab3, "Visualization")
+        grapher_tab = GraphTab()
+        self.tab_widget.addTab(grapher_tab, "Grapher")
 
 
 if __name__ == "__main__":

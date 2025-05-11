@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout)
 from src.buttons import AttributesLoaded, ButtonsUpdateLabel
 from src.diceroller import WindowCheck
