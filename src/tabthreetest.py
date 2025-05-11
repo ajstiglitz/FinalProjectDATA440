@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout, QPushButton,
-                             QLineEdit, QHBoxLayout, QVBoxLayout, QDialog, QFileDialog)
+                             QLineEdit, QHBoxLayout, QVBoxLayout, QDialog)
 
 from PyQt5.QtGui import QIntValidator
 
@@ -15,9 +15,6 @@ from datetime import datetime as dt
 import numpy as np
 
 import os
-
-#use in the save_graph function
-from src.helpers import check_directory
 
 PATH_FIGURES = 'figures'
 
@@ -84,8 +81,7 @@ class Scenario(QWidget):
 
     def handle_dice_selection(self, results: list[int]):
      self.dice_array = results
-     self.result_label.setText(f"Selected Dice: {self.dice_array}")
-     print(f"{self.name} - Dice Array: {self.dice_array}")       
+     self.result_label.setText(f"Selected Dice: {self.dice_array}") 
 
     def get_modifier(self) -> int:
         return self.modWidget.get_modifier()

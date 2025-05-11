@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import (QWidget, QLabel,
                              QLineEdit, QHBoxLayout, QVBoxLayout)
 from src.qtcomponents import LabelTextEditWidget, ImageUploadWidget
