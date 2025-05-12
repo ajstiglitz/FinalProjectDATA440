@@ -11,6 +11,16 @@ QMainWindow {
 QCalendar {
 	background-color: #151a1e;
 }
+
+QScrollArea {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #4fa08b;
+	background-color: #222b2e;
+	color: #d3dae3;
+	padding: 2px;	
+}
+
 QTextEdit {
 	border-width: 1px;
 	border-style: solid;
@@ -528,4 +538,25 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 }
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    background: none;
+}
+
+
+/*
+Below blocks were added to be specific to this code
+*/
+
+QLabel#AttributeTitle{
+	color: #222b2e;
+}
+
+QCheckBox#CheckboxWords{
+	color: #222b2e;
+}
+
+QLabel#ModLabel{
+	color: #58a492;
+}
+
+QLabel#AttributeLabel{
+	color: #222b2e;
 }

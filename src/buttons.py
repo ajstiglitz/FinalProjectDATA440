@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
 
 #Keeping QSize here for now if I use it for formatting later
 from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtGui import QFont
  
 from functools import partial
 
@@ -15,6 +16,7 @@ class AttributesLoaded(QWidget):
 
         #Prof widget is the widget for Proficiency
         self.prof_widget = prof_widget
+        self.setMaximumWidth(500)
 
         layout = QVBoxLayout()
 
@@ -33,8 +35,11 @@ class AttributesLoaded(QWidget):
             attr_section.addWidget(attr_check)
 
             section_widget = QWidget()
+
             section_widget.setLayout(attr_section)
             layout.addWidget(section_widget)
+
+
 
 class CombinedProfInsp(QWidget):
     """
@@ -77,8 +82,8 @@ class ButtonsUpdateLabel(QWidget):
         #Sets the layout
         layout = QVBoxLayout()
         #Messing with the format
-        layout.setSpacing(2)
-        layout.setContentsMargins(5,5,5,5)
+        layout.setSpacing(5)
+        #layout.setContentsMargins(2,2,2,2)
 
         #Adds the widget to the layout
         layout.addWidget(self.prof_label)
@@ -228,6 +233,15 @@ class AttributeAdjuster(QWidget):
 
         #What the attribute name will be for the widget
         attribute_names = QLabel(self.name)
+        #Can directly access this from the qss now
+        attribute_names.setObjectName("AttributeTitle")
+
+        #Setting the font of the attribute
+        font = QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        attribute_names.setFont(font)
+
         #Aligns the label to the center
         attribute_names.setAlignment(Qt.AlignCenter)
         #Adds the label to the widget
@@ -247,6 +261,10 @@ class AttributeAdjuster(QWidget):
 
         #QLabel for the modifier is created
         self.modifier_label = QLabel()
+
+        #Setting object name to affect in the qss
+        self.modifier_label.setObjectName("ModLabel")
+
         #Aligned to the center
         self.modifier_label.setAlignment(Qt.AlignCenter)
 
@@ -266,6 +284,10 @@ class AttributeAdjuster(QWidget):
 
         #Creates an empty label for the attribute to display
         self.attribtue_display = QLabel()
+
+        #Sets the object name to be adjusted in the qss directly
+        self.attribtue_display.setObjectName("AttributeLabel")
+
         #Aligns the label to the center
         self.attribtue_display.setAlignment(Qt.AlignCenter)
         #Updates the attribute
@@ -304,7 +326,7 @@ class AttributeAdjuster(QWidget):
 
 class AttributeCheck(QWidget):
     """
-    This class creates the check boxes 
+    This class creates the check boxes for the different attributes.
     """
     def __init__(self, attr_name:str, 
                  attr_adjuster:AttributeAdjuster,
@@ -359,6 +381,9 @@ class AttributeCheck(QWidget):
 
             #Checkboxes depending on what the skill is created
             checkbox = QCheckBox(skill)
+
+            #Setting object name to directly affect object in qss
+            checkbox.setObjectName("CheckboxWords")
 
             label = QLabel("")
             #HERE IS WHERE THE LABEL NEEDS TO BE MOVED
