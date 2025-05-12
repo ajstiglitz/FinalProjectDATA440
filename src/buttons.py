@@ -386,6 +386,7 @@ class AttributeCheck(QWidget):
             checkbox.setObjectName("CheckboxWords")
 
             label = QLabel("")
+
             #HERE IS WHERE THE LABEL NEEDS TO BE MOVED
             #FIND OUT HOW TO MOVE IT FURTHER LEFT, AS IT STILL IS IN THE CHECKBOX
             #CHECKBOX ALSO IS NOT LIGHTING UP WHEN HOVERED OVER
