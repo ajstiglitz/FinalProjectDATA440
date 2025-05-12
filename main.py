@@ -20,9 +20,6 @@ class MainWindow(QMainWindow):
         #Sets the title of the window
         self.setWindowTitle("DiceRoller")
 
-        #Adding an icon-- need to move icon to a good folder
-        #self.setWindowIcon(QIcon('icon.png'))
-
         self.tab_widget = QTabWidget()
         #Sets the direction of the tabs. If you wanted them at the top, change 'West' to 'North'
         #If you want them to the right, set it to 'East'
