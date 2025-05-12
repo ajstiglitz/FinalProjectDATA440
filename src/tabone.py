@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout)
-from src.buttons import AttributesLoaded, ButtonsUpdateLabel
+from src.buttons import AttributesLoaded, ButtonsUpdateLabel, CombinedProfInsp
 from src.diceroller import WindowCheck
 
 #this is the assembly test for tab1 before adding it to main.py
@@ -19,6 +19,8 @@ class RollerTab(QWidget):
 
         self.prof_bonus = ButtonsUpdateLabel()
 
+        self.prof_insp = CombinedProfInsp(self.prof_bonus)
+
         #splitting until we figure out issues with adjustor
         #left_column.addWidget(QLabel("ADJUSTER HERE"))
         self.attributes = AttributesLoaded(self.prof_bonus)
@@ -28,6 +30,7 @@ class RollerTab(QWidget):
         #right side of window
         right_col = QVBoxLayout()
         self.roller_widget = WindowCheck()
+        right_col.addWidget(self.prof_insp)
         right_col.addWidget(self.roller_widget)
         #Maybe have dice roll AND result of roll with modifiers
         #since nat 1 is nat 1 regardless of what you have added

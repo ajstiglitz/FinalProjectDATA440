@@ -2,11 +2,13 @@ from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
                              QPushButton, QHBoxLayout, QGridLayout)
 
 #Keeping QSize here for now if I use it for formatting later
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, pyqtSignal
  
+from functools import partial
+
 class AttributesLoaded(QWidget):
     """
-    This class ...
+    This class ... ADD DEF
     """
     def __init__(self, prof_widget):
         super().__init__()
@@ -22,7 +24,7 @@ class AttributesLoaded(QWidget):
         self.setLayout(layout)
 
         #Creates attributes + checkboxes
-        for attr_name in ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']:
+        for attr_name in ['STR', 'DEX', 'CONS', 'INT', 'WIS', 'CHA']:
             attr_adjuster = AttributeAdjuster(attr_name)
             attr_check = AttributeCheck(attr_name, attr_adjuster, self.prof_widget)
 
@@ -39,8 +41,11 @@ class CombinedProfInsp(QWidget):
     This class combines the widgets for Inspiration and Proficiency.
     They were combined here to be called for easier readbility and formatting.
     """
-    def __init__(self):
+    def __init__(self, prof_widget):
         super().__init__()
+
+        #Prof widget is the widget for Proficiency
+        self.prof_widget = prof_widget
 
         layout = QVBoxLayout()
         
@@ -48,12 +53,9 @@ class CombinedProfInsp(QWidget):
         layout.setSpacing(2)
         layout.setContentsMargins(5,5,5,5)
 
-        #Proficiency bonus class called
-        self.proficiency_bonus = ButtonsUpdateLabel()
-
         self.inspiration = CheckBoxAndLabel()
 
-        layout.addWidget(self.proficiency_bonus)
+        layout.addWidget(self.prof_widget)
         layout.addWidget(self.inspiration)
 
         self.setLayout(layout)
@@ -64,6 +66,8 @@ class ButtonsUpdateLabel(QWidget):
     """
     This class creates the widget for the Proficiency bonus in the GUI.
     """
+    #Signal emitted to connect widgets so that the attribute gets the correct proficiency value
+    proficiency_changed = pyqtSignal(int)
     def __init__(self):
         super().__init__()
 
@@ -132,6 +136,7 @@ class ButtonsUpdateLabel(QWidget):
             self.value -= 1
             self.update_prof_display()
             self.update_button_states()
+            self.proficiency_changed.emit(self.value)
 
     def increase_number(self):
         #This function will increase the number of the counter by 1
@@ -140,12 +145,17 @@ class ButtonsUpdateLabel(QWidget):
             self.value += 1
             self.update_prof_display()
             self.update_button_states()
+            self.proficiency_changed.emit(self.value)
     
     def update_button_states(self):
         #This function checks the value
         #Button states are updated based on the number
         self.minus_button.setEnabled(self.value > 2)
         self.plus_button.setEnabled(self.value < 6)
+
+    def get_prof_bonus(self):
+        #Function gets the value of the proficiency bonus
+        return self.value
 
 
 #For Tab 1 formatting, this is meant to go below ButtonsUpdateLabel at the top right corner
@@ -304,6 +314,9 @@ class AttributeCheck(QWidget):
         #Creates a variable of the proficiency widget
         self.prof_widget = prof_widget
 
+        #takes the emmitted signal from the proficiency
+        self.prof_widget.proficiency_changed.connect(self.update_all_labels)
+
         #Empty list that will have values appended into it
         self.checks = []
 
@@ -357,7 +370,7 @@ class AttributeCheck(QWidget):
             label.setFixedWidth(30)
 
             #Function to change the state of the checkbox when checked. It updates the label
-            checkbox.stateChanged.connect(lambda state, c=checkbox, l=label: self.update_label(c, l))
+            checkbox.stateChanged.connect(partial(self.update_label, checkbox, label))
 
             #Adds the widgets
             grid_layout.addWidget(checkbox, rows, cols*2)
@@ -370,10 +383,15 @@ class AttributeCheck(QWidget):
         #This function updates the label of the checkbox when it is checked
         #here is probably where the proficiency needs to be looked at so that it isn't the set value
         if checkbox.isChecked():
-            prof = self.prof_widget.value
             mod = self.attr_adjuster.get_modifier()
             #right not it seems that prof is set to 2 and doesnt update based on the proficiency label
-            total = prof + mod
-            label.setText(str(total))
+            prof_bonus = self.prof_widget.get_prof_bonus()
+            label.setText(str(mod + prof_bonus))
         else:
             label.setText("")
+
+    def update_all_labels(self):
+        # Loop through all checkboxes and update if checked
+        for checkbox, label in self.checks:
+            if checkbox.isChecked():
+                self.update_label(checkbox, label)

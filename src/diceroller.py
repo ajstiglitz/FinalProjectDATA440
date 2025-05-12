@@ -5,8 +5,6 @@ from PyQt5.QtGui import QMovie
 
 import random
 
-from src.buttons import CombinedProfInsp
-
 import os
 
 # Tab 1-specific widgets
@@ -251,14 +249,13 @@ class WindowCheck(QWidget):
     def __init__(self):
         super().__init__()
 
+
         self.roller = RollerBoxWidget()
         self.result = ResultWidget()
-        self.prof_insp = CombinedProfInsp()
 
         self.roller.roll_made.connect(self.result.update_result_label)
 
         layout = QVBoxLayout()
-        layout.addWidget(self.prof_insp)
         layout.addWidget(self.roller)
         layout.addWidget(self.result)
         
