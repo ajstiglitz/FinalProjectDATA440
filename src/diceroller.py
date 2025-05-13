@@ -89,6 +89,7 @@ class RollerBoxWidget(QWidget):
         #First GIF that appears is the d20 GIF
         self.gif = QMovie(os.path.join("src","gifs","d20.gif"))
         #Sets the GIF
+        self.gif.setScaledSize(QSize(self.gif_width, self.gif_height))
         self.die_gif.setMovie(self.gif)
         #Starts the gif so that it moves
         self.gif.start()    
