@@ -47,7 +47,7 @@ class SimulatedDice:
 
 class RollerBoxWidget(QWidget):
     """
-    This class 
+    This class chooses the dice that is simulated and changes the GIF accordingly.
     """
     #Signal to emit rolled value
     roll_made = pyqtSignal(int) 

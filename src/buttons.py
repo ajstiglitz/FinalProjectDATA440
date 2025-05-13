@@ -9,7 +9,7 @@ from functools import partial
 
 class AttributesLoaded(QWidget):
     """
-    This class ... ADD DEF
+    This class loads the attribute widgets and adds them to the layout.
     """
     def __init__(self, prof_widget):
         super().__init__()
