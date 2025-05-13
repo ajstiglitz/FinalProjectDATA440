@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout, QPushButton,
                              QLineEdit, QHBoxLayout, QVBoxLayout, QDialog)
 
-from PyQt5.QtGui import QIntValidator
+from PyQt5.QtGui import QIntValidator, QFont
 
 from typing import Callable
 
@@ -75,6 +75,13 @@ class Scenario(QWidget):
         #Set the size later for stylization
         #Label that will use a provided name
         self.label = QLabel(self.name)
+
+        #Setting font of Label
+        font_one = QFont()
+        font_one.setPointSize(15)
+        font_one.setBold(True)
+        self.label.setFont(font_one)
+
         #Sets the alignement to the center
         self.label.setAlignment(Qt.AlignCenter)
         #Adds the widget to the layout
@@ -93,6 +100,10 @@ class Scenario(QWidget):
 
         #Label to show the result of the dice selected so that the user knows what is being tested
         self.result_label = QLabel("Selected Dice: ")
+        #Setting font of Label
+        font_two = QFont()
+        font_two.setBold(True)
+        self.result_label.setFont(font_two)
         #Adds the widget to the layout
         layout.addWidget(self.result_label)
 
@@ -201,6 +212,10 @@ class ModifierWidget(QWidget):
 
         #Label is created for user to know what the textbox is for
         self.label = QLabel("Mod: ")
+        #Font changed
+        font = QFont()
+        font.setBold(True)
+        self.label.setFont(font)
 
         #Adds the widget to the layout
         layout.addWidget(self.label)
@@ -358,11 +373,11 @@ class PlotInterface(QWidget):
         for i, s in enumerate(scenarios):
             ax.bar(s.outcomes, s.p, alpha=0.7, label=f"Combo {i+1}", color=colors[i % len(colors)])
         #Sets the title of the graph
-        ax.set_title("Dice Roll Probabilities")
+        ax.set_title("The Chance of Dice Rolls")
         #Sets the name of the x-label
-        ax.set_xlabel("Total")
+        ax.set_xlabel("Possible Results of a Roll")
         #Sets the name of the y-label
-        ax.set_ylabel("Probability")
+        ax.set_ylabel("Probability of a Roll")
         #Shows a legend so that the user can see which combo connects to which bar graph
         ax.legend()
         #Draws the graph on the canvas to be seen in the GUI

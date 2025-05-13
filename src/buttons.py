@@ -386,24 +386,21 @@ class AttributeCheck(QWidget):
             checkbox.setObjectName("CheckboxWords")
 
             label = QLabel("")
+            label.setObjectName("AttributeAppearLabel")
 
-            #HERE IS WHERE THE LABEL NEEDS TO BE MOVED
-            #FIND OUT HOW TO MOVE IT FURTHER LEFT, AS IT STILL IS IN THE CHECKBOX
-            #CHECKBOX ALSO IS NOT LIGHTING UP WHEN HOVERED OVER
-            #IT SEEMS THAT THE LABEL NEEDS TO BE CLICKED AND NOT THE BOX ITSELF TO CHECK IT
-            #FIX
             label.setAlignment(Qt.AlignLeft)
-            label.setFixedWidth(30)
+            label.setFixedWidth(18)
 
             #Function to change the state of the checkbox when checked. It updates the label
             checkbox.stateChanged.connect(partial(self.update_label, checkbox, label))
 
             #Adds the widgets
             grid_layout.addWidget(checkbox, rows, cols*2)
-            grid_layout.addWidget(label, rows, cols*2)
+            grid_layout.addWidget(label, rows, cols*2+1)
 
             #Checks list gets the checkboxes and labels corresponding to a skill appended
             self.checks.append((checkbox, label))
+
 
     def update_label(self, checkbox, label):
         #This function updates the label of the checkbox when it is checked

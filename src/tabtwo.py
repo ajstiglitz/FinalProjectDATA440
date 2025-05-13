@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import (QWidget, QLabel,
                              QLineEdit, QHBoxLayout, QVBoxLayout)
 from src.qtcomponents import LabelTextEditWidget, ImageUploadWidget
 
+from PyQt5.QtGui import QFont
+
 class CharacterInfoTab(QWidget):
     """
     This class is for the complete assembly in the correct layout 
@@ -16,14 +18,19 @@ class CharacterInfoTab(QWidget):
         # At the top are character details like name, race, class, etc.
         top_row_layout = QHBoxLayout()
         #Names that the labels will use
-        labels = ["Name", "Class", "Race", "Alignment", "Level", "Age"]
+        labels = ["Name:", "Class:", "Race:", "Alignment:", "Level:", "Age:"]
         self.line_edits = {}
+
 
         for label_text in labels:
             #Container for the label widget and text editor is a vertical layout
             container = QVBoxLayout()
             #Creates the label with the label names
             label = QLabel(label_text)
+            #Setting the Label Fonts
+            font = QFont()
+            font.setBold(True)
+            label.setFont(font)
             #Creates the text box widget
             edit = QLineEdit()
             #Adds the label to the layout
@@ -33,6 +40,7 @@ class CharacterInfoTab(QWidget):
             #Adds the container layout to the layout for the top of the tab
             top_row_layout.addLayout(container)
             self.line_edits[label_text] = edit
+
 
         #Main layout has the top row layout added
         main_layout.addLayout(top_row_layout)
@@ -46,6 +54,10 @@ class CharacterInfoTab(QWidget):
 
         #Right widget: Features
         self.features_widget = LabelTextEditWidget("Features & Traits")
+        #Setting the Label Fonts
+        gen_font = QFont()
+        gen_font.setBold(True)
+        self.features_widget.setFont(font)
         middle_layout.addWidget(self.features_widget, 2)
 
         #Main layout has the middle layout added
@@ -53,8 +65,14 @@ class CharacterInfoTab(QWidget):
 
         #At the bottom are the widgets for the inventory and proficiencies a character may have
         bottom_layout = QHBoxLayout()
+        
         self.traits_widget = LabelTextEditWidget("Inventory")
+        #Sets the font of the name and inside the text box
+        self.traits_widget.setFont(font)
+
         self.notes_widget = LabelTextEditWidget("Other Proficiencies & Languages")
+        #Sets the font of the name and inside the text box
+        self.notes_widget.setFont(font)
 
         #Widgets added to the bottom layout
         bottom_layout.addWidget(self.traits_widget)

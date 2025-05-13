@@ -560,3 +560,7 @@ QLabel#ModLabel{
 QLabel#AttributeLabel{
 	color: #222b2e;
 }
+
+QLabel#AttributeAppearLabel{
+	color: #58a492;
+}
