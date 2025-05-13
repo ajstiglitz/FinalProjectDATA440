@@ -468,15 +468,15 @@ class GraphButtons(QWidget):
             combos.append(DiceCombo(s2_dice, s2_mod))
 
         if combos:
-            #draws the plot with the information
+            #Draws the plot with the information
             self.plot_interface.draw_plot(combos)        
 
     def save_graph(self)-> None:
         #This function saves the graph
-        # Ensure the folder exists
+        #Ensures the folder exists
         check_directory(PATH_FIGURES)
-        # Generate timestamped filename
+        #Generate timestamped filename
         ts = timestamp()
         filename = os.path.join(PATH_FIGURES, f"plot_{ts}.png")
-        # Save the figure
+        #Save the figure
         self.plot_interface.save_plot(filename)

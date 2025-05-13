@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QCheckBox, QLabel,
                              QPushButton, QHBoxLayout, QGridLayout)
 
-#Keeping QSize here for now if I use it for formatting later
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QFont
  
@@ -20,7 +19,7 @@ class AttributesLoaded(QWidget):
 
         layout = QVBoxLayout()
 
-        # Trying to mess with the format of the widgets to see if I can fix the spacing
+        #Formatting of layout
         layout.setSpacing(2)
         layout.setContentsMargins(5,5,5,5)
         self.setLayout(layout)
@@ -38,6 +37,7 @@ class AttributesLoaded(QWidget):
 
             section_widget.setLayout(attr_section)
             layout.addWidget(section_widget)
+            
 
 
 
@@ -54,7 +54,7 @@ class CombinedProfInsp(QWidget):
 
         layout = QVBoxLayout()
         
-        #Trying to mess with the formatting 
+        #Formatting layout
         layout.setSpacing(2)
         layout.setContentsMargins(5,5,5,5)
 
@@ -66,7 +66,7 @@ class CombinedProfInsp(QWidget):
         self.setLayout(layout)
 
 
-#for Tab 1. Meant to go at the top right corner
+#Class is for Tab 1. Meant to go at the top right corner
 class ButtonsUpdateLabel(QWidget):
     """
     This class creates the widget for the Proficiency bonus in the GUI.
@@ -81,7 +81,7 @@ class ButtonsUpdateLabel(QWidget):
 
         #Sets the layout
         layout = QVBoxLayout()
-        #Messing with the format
+        #Formatting
         layout.setSpacing(5)
         #layout.setContentsMargins(2,2,2,2)
 
@@ -176,7 +176,7 @@ class CheckBoxAndLabel(QWidget):
         #Makes the main layout a QVBox
         layout = QVBoxLayout()
 
-        #Messing with the format
+        #Formatting the layout
         layout.setSpacing(2)
         layout.setContentsMargins(5,5,5,5)
 
@@ -188,7 +188,7 @@ class CheckBoxAndLabel(QWidget):
         #Sets the geometry for formatting
         self.checkBox.setGeometry(200,150,100,30)
 
-        #Empty label
+        #Empty label that will be updated, this is a placeholder
         self.label = QLabel("")
         #Sets the alignment of the label
         self.label.setAlignment(Qt.AlignLeft)
@@ -224,7 +224,7 @@ class AttributeAdjuster(QWidget):
         #Main layout variable is QVBox
         main_layout = QVBoxLayout()
 
-        #Messing with the formatting
+        #Formatting
         main_layout.setSpacing(2)
         main_layout.setContentsMargins(5,5,5,5)
 
@@ -336,7 +336,7 @@ class AttributeCheck(QWidget):
         #Creates a variable of the proficiency widget
         self.prof_widget = prof_widget
 
-        #takes the emmitted signal from the proficiency
+        #Takes the emmitted signal from the proficiency
         self.prof_widget.proficiency_changed.connect(self.update_all_labels)
 
         #Empty list that will have values appended into it
@@ -348,12 +348,6 @@ class AttributeCheck(QWidget):
         #Sets the layout to a QVBox
         layout = QVBoxLayout()
         self.setLayout(layout)
-
-        #NTS: number of check boxes based on the the attribute like how in ResultWidget, the second combo box has different number of options
-        # when checked, the proficiency bonus should be added to the modifier that the attribute display has
-        #list of tuples for the different options
-        #Right now, the proficiency bonus is set at 2 and doesn't update when it is increased
-        #checkboxes just do modifier + 2 and not modifier + proficiency bonus
 
         #This is a dictionary containing the possible skills for the main attributes
         attributes_options = {

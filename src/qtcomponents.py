@@ -11,16 +11,16 @@ class LabelTextEditWidget(QWidget):
     def __init__(self, label_text="Label"):
         super().__init__()
 
-        # Sets the layout as a QVBox, so that the widgets are vertical
+        #Sets the layout as a QVBox, so that the widgets are vertical
         layout = QVBoxLayout()
         self.label = QLabel(label_text)
         self.text_edit = QTextEdit()
 
-        # Components added in this order so that the label is above the text editor
+        #Components added in this order so that the label is above the text editor
         layout.addWidget(self.label)
         layout.addWidget(self.text_edit)
 
-        # Makes sure that the 
+        #Makes sure that the 
         self.setLayout(layout)
 
 # *Check README Links to resources section*

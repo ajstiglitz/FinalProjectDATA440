@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import (QWidget, QLabel,
-                             QLineEdit, QHBoxLayout, QVBoxLayout)
+from PyQt5.QtWidgets import (QWidget, QLabel, QLineEdit, QHBoxLayout, QVBoxLayout)
 from src.qtcomponents import LabelTextEditWidget, ImageUploadWidget
 
 from PyQt5.QtGui import QFont
@@ -15,7 +14,7 @@ class CharacterInfoTab(QWidget):
         #Main layout is vertical
         main_layout = QVBoxLayout()
 
-        # At the top are character details like name, race, class, etc.
+        #At the top are character details like name, race, class, etc.
         top_row_layout = QHBoxLayout()
         #Names that the labels will use
         labels = ["Name:", "Class:", "Race:", "Alignment:", "Level:", "Age:"]

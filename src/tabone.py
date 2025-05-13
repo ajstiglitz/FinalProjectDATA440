@@ -3,7 +3,6 @@ from src.buttons import AttributesLoaded, ButtonsUpdateLabel, CombinedProfInsp
 from src.diceroller import WindowCheck
 
 #This is the for tab1 before adding it to main.py
-
 class RollerTab(QWidget):
     """
     This class is for the complete assembly in the correct layout 
@@ -14,7 +13,7 @@ class RollerTab(QWidget):
 
         main_layout = QHBoxLayout()
 
-        #at the top are the prof bonus and inspiration widget and then the dice roller widget
+        #At the top are the prof bonus and inspiration widget and then the dice roller widget
         left_column = QVBoxLayout()
 
         #Widgets for the Proficiency and Inspiration
@@ -24,7 +23,7 @@ class RollerTab(QWidget):
 
         self.attributes = AttributesLoaded(self.prof_bonus)
 
-        #Scrollbar so that user can see all the attributes easily in tab 1
+        #Scrollbar is so that the user can see all the attributes easily in tab 1
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
 
@@ -43,8 +42,6 @@ class RollerTab(QWidget):
         self.roller_widget = WindowCheck()
         right_col.addWidget(self.prof_insp)
         right_col.addWidget(self.roller_widget)
-        #Maybe have dice roll AND result of roll with modifiers
-        #since nat 1 is nat 1 regardless of what you have added
 
         #Add to main layout
         main_layout.addLayout(left_column, stretch=1)

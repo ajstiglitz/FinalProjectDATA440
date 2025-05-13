@@ -1,13 +1,13 @@
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel,
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QLabel, QLineEdit,
                              QPushButton, QHBoxLayout, QComboBox)
 from PyQt5.QtCore import Qt, pyqtSignal, QSize
-from PyQt5.QtGui import QMovie
+from PyQt5.QtGui import QMovie, QIntValidator
 
 import random
 
 import os
 
-# Tab 1-specific widgets
+#Tab 1-specific widgets
 class SimulatedDice:
     """
     This class creates the random number generators that represent the different dice.
@@ -55,12 +55,8 @@ class RollerBoxWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        #combo box should choose dice simulated
-        #simulated should roll with click of button
-        #result should be saved for results
-
         #Initializing the first roll
-        self.last_roll = None
+        self.last_roll = 0
 
         #Dice roller label
         self.label = QLabel("Dice Roller")
@@ -72,7 +68,7 @@ class RollerBoxWidget(QWidget):
         self.combo_box.addItems(item_list)
         self.combo_box.setCurrentIndex(0)
 
-        #Based on what die is chosen, gif is changed
+        #Based on what die is chosen, GIF is changed
         self.combo_box.currentIndexChanged.connect(self.update_image)
 
         #Layout is horizontal and the label and combobox widgets are added to the layout
@@ -80,19 +76,19 @@ class RollerBoxWidget(QWidget):
         top_layout.addWidget(self.label)
         top_layout.addWidget(self.combo_box)
 
-        #The gif size is set
+        #The GIF size is set
         self.gif_width = 400
         self.gif_height = 400
 
-        #A Label for the gifs
+        #A Label for the GIFs
         self.die_gif = QLabel()
-        #Alignment and size set for the gifs
+        #Alignment and size set for the GIFs
         self.die_gif.setAlignment(Qt.AlignCenter)
         self.die_gif.setFixedSize(self.gif_width, self.gif_height)
         
-        #First gif that appears is the d20 gif
+        #First GIF that appears is the d20 GIF
         self.gif = QMovie(os.path.join("src","gifs","d20.gif"))
-        #Sets the gif
+        #Sets the GIF
         self.die_gif.setMovie(self.gif)
         #Starts the gif so that it moves
         self.gif.start()    
@@ -112,7 +108,7 @@ class RollerBoxWidget(QWidget):
         self.setLayout(layout)
 
     def roll_die(self):
-        # This function rolls one of the functions from the SimulatedDice class
+        #This function rolls one of the functions from the SimulatedDice class
         die = self.combo_box.currentText()
         #Depending on which dice it is, the function called will change
         result = {
@@ -128,19 +124,19 @@ class RollerBoxWidget(QWidget):
 
 
     def update_image(self):
-        #This function updates the image (gif) shown based on the dice chosen from the combo box.
+        #This function updates the image (GIF) shown based on the dice chosen from the combo box.
         die = self.combo_box.currentText()
         gif_path = os.path.join("src","gifs",f"{die}.gif")
 
-        #The previous gif stops
+        #The previous GIF stops
         self.gif.stop()
-        #New gif QMovie instance created with the correct gif
+        #New gif QMovie instance created with the correct GIF
         self.gif = QMovie(gif_path)
 
-        #Gif scaled
+        #GIF scaled
         self.gif.setScaledSize(QSize(self.gif_width, self.gif_height))
         self.die_gif.setMovie(self.gif)
-        #Gif movement started
+        #GIF movement started
         self.gif.start()
 
 
@@ -150,6 +146,9 @@ class ResultWidget(QWidget):
     """
     def __init__(self):
         super().__init__()
+
+        #Initializing last roll value
+        self.last_roll = 0
 
         #Combobox created with the different possible attributes
         self.combo_box_attribute = QComboBox()
@@ -165,9 +164,28 @@ class ResultWidget(QWidget):
         #Size is fixed
         self.combo_2.setFixedSize(100,30)
 
+        #Line edit for the modifier that will be added to the roll
+        self.modifier_box = QLineEdit()
+        #Makes sure thatthe user input was a number
+        self.modifier_box.setValidator(QIntValidator(-999, 999))
+        self.modifier_box.setPlaceholderText("Add Integer")
+        self.modifier_box.setFixedSize(100,30)
+
+        #Button that calculates the result
+        self.calc_button = QPushButton("Calculate")
+        self.calc_button.clicked.connect(self.calculate_roll_result)
+
+        #Initial roll label
+        self.initial_roll = QLabel("Initial Roll: ")
+        self.initial_roll.setAlignment(Qt.AlignCenter)
+        #Label initialized with 0
+        self.initial_value_label = QLabel("0")
+        #Alignment set to the center
+        self.initial_value_label.setAlignment(Qt.AlignCenter)
+
         #Label initialized
         self.result_label = QLabel("Result of STR : Athletics")
-        #aligned to the center
+        #Aligned to the center
         self.result_label.setAlignment(Qt.AlignCenter)
         #Label initialized with 0
         self.value_label = QLabel("0")
@@ -176,11 +194,31 @@ class ResultWidget(QWidget):
 
         #The layout is vertical
         layout = QVBoxLayout()
+
+        #Row for calc button and user input
+        input_button_row = QHBoxLayout()
+
+        input_button_row.addWidget(self.modifier_box)
+        input_button_row.addWidget(self.calc_button)
+
+        #The layout for the labels is horizontal
+        h_layout_one = QHBoxLayout()
+        h_layout_two = QHBoxLayout()
+
+        #Top row is the names for the rolls
+        h_layout_one.addWidget(self.initial_roll)
+        h_layout_one.addWidget(self.result_label)
+
+        #Second row is for the rolls themselves
+        h_layout_two.addWidget(self.initial_value_label)
+        h_layout_two.addWidget(self.value_label)
+
         #Widgets are added
         layout.addWidget(self.combo_box_attribute)
         layout.addWidget(self.combo_2)
-        layout.addWidget(self.result_label)
-        layout.addWidget(self.value_label)
+        layout.addLayout(input_button_row)
+        layout.addLayout(h_layout_one)
+        layout.addLayout(h_layout_two)
 
         #Interface is set to make the widgets appear
         self.setLayout(layout)
@@ -226,14 +264,25 @@ class ResultWidget(QWidget):
 
         self.update_result_label(0)
 
-    def update_result_label(self, value):
-        #This function is based on the roll of the die and the choice from the combo 2.
-        # example: if a d20 rolled a 10, and the combo chosen was str: athletics and the player has a +4 and the proficiency checked (lets say another +2)
-        # then the resulting roll should be 10 + 4 + 2 which would be 16
-        # result should come out as a label. 
+    def calculate_roll_result(self,value):
+        #This function calculates the result of the integer added by the user with the dice roll
+        try:
+            user_input = int(self.modifier_box.text())
 
-        #Right now the roll doesnt seem to add anything
-        #Add a secondary label to show the roll of the die (So that you know if you rolled a nat one)
+            #Calculates the total result
+            total = self.last_roll + user_input
+            #Updates the label
+            self.update_result_label(total)
+        except ValueError:
+            pass
+
+    def get_initial_roll(self, value):
+        #This function gets the initial dice roll to show the user
+        self.last_roll = value
+        self.initial_value_label.setText(str(value))
+
+    def update_result_label(self, value):
+        #This function is updates the label based on the roll result of the die
 
         stat = self.combo_box_attribute.currentText()
         attribute = self.combo_2.currentText()
@@ -249,11 +298,10 @@ class WindowCheck(QWidget):
     def __init__(self):
         super().__init__()
 
-
         self.roller = RollerBoxWidget()
         self.result = ResultWidget()
 
-        self.roller.roll_made.connect(self.result.update_result_label)
+        self.roller.roll_made.connect(self.result.get_initial_roll)
 
         layout = QVBoxLayout()
         layout.addWidget(self.roller)
